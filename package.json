@@ -1,0 +1,16 @@
+{
+  "name": "msadmin-company-sales",
+  "version": "1.0.0",
+  "description": "To run the microservice, you need to have the .env file created.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "pg": "^8.11.3"
+  }
+}
