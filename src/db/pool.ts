@@ -7,7 +7,7 @@ const pool = new Pool({
   host: getEnvVariable('POSTGRES_HOST'),
   database: getEnvVariable('POSTGRES_DB'),
   password: getEnvVariable('POSTGRES_PASSWORD'),
-  port: 5432,
+  port: parseInt(getEnvVariable('POSTGRES_PORT')),
 })
 
 export default pool
