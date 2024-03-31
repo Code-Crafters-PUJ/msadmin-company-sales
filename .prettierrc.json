@@ -1,0 +1,12 @@
+{
+  "importOrder": ["^components/(.*)$", "^[./]"],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true,
+  "trailingComma": "es5",
+  "tabWidth": 2,
+  "semi": false,
+  "singleQuote": true,
+  "arrowParens": "always",
+  "bracketSpacing": true,
+  "plugins": ["eslint-config-prettier", "@trivago/prettier-plugin-sort-imports"]
+}
