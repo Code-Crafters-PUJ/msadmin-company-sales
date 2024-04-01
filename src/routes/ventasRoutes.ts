@@ -5,13 +5,14 @@ import {
   obtenerVentasPorNegocio,
   registrarVenta,
 } from '../controller/ventaController'
+import { validateSalesRole } from '../middlewares/validate-role'
 
 const router = express.Router()
 
-router.post('/', registrarVenta)
+router.post('/', [validateSalesRole], registrarVenta)
 
-router.get('/all', obtenerTodasLasVentas)
+router.get('/all', [validateSalesRole], obtenerTodasLasVentas)
 
-router.get('/:idNegocio', obtenerVentasPorNegocio)
+router.get('/:idNegocio', [validateSalesRole], obtenerVentasPorNegocio)
 
 export default router
