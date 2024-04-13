@@ -1,6 +1,8 @@
 import { Resend } from 'resend'
 
-const resend = new Resend('API_KEY') // TODO: replace 'API_KEY' with your resend API key
+import { getEnvVariable } from '../config/environment'
+
+const resend = new Resend(getEnvVariable('RESEND_API_KEY')) // TODO: replace 'API_KEY' with your resend API key
 
 export const sendEmail = async (
   email: string,
@@ -8,11 +10,11 @@ export const sendEmail = async (
   message: string
 ): Promise<void> => {
   const emailData = {
-    from: '', // TODO: replace with a valid email
+    from: 'StockWage Admin <onboarding@resend.dev>', // TODO: replace with a valid email
     to: email,
     subject,
     text: message,
   }
 
-  await resend.emails.send(emailData)
+  console.log(await resend.emails.send(emailData))
 }

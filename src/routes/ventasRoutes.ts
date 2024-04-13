@@ -3,6 +3,7 @@ import express from 'express'
 import {
   obtenerTodasLasVentas,
   obtenerVentasPorNegocio,
+  pruebaEmail,
   registrarVenta,
 } from '../controller/ventaController'
 import {
@@ -17,5 +18,7 @@ router.post('/', [validateSalesRole], registrarVenta)
 router.get('/all', [validateSalesOrAdminRole], obtenerTodasLasVentas)
 
 router.get('/:idNegocio', [validateSalesOrAdminRole], obtenerVentasPorNegocio)
+
+router.post('/email', pruebaEmail)
 
 export default router

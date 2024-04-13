@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 
 import pool from '../db/pool'
+import { sendEmail } from '../helpers/emails'
 
 export const registrarVenta = async (
   req: Request,
@@ -83,4 +84,12 @@ export const obtenerVentasPorNegocio = async (
     console.error('Error al obtener ventas por negocio:', error)
     res.status(500).json({ error: 'Error interno del servidor' })
   }
+}
+
+export const pruebaEmail = async (req: Request, res: Response) => {
+  const { email, subject, message } = req.body
+
+  sendEmail(email, subject, message)
+
+  res.json({ info: 'Email enviado', email, subject, message })
 }
