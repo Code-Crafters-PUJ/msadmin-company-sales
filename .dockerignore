@@ -1,0 +1,21 @@
+# ? Docker
+.dockerignore
+Dockerfile
+docker-compose.yml
+
+# ? Git
+git/
+.gitignore
+
+# ? Node
+node_modules/
+build/
+.eslintrc.json
+.prettierrc.json
+
+# ? vscode
+.vscode/
+
+# ? Docs
+example.env
+README.md

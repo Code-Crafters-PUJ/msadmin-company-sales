@@ -2,7 +2,7 @@ import 'dotenv/config'
 import express from 'express'
 
 import { getEnvVariable } from './config/environment'
-import ventaRoutes from './routes/ventasRoutes'
+import ventaRoutes from './routes/ventas-routes'
 
 const app = express()
 
