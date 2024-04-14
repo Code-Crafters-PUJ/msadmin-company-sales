@@ -4,22 +4,14 @@ import { Request, Response } from 'express'
 import pool from '../db/pool'
 import { CreateBillingDto } from '../dtos/create-billing-dto'
 import { sendEmail } from '../helpers/emails'
+import { prismaClient } from '../db/prisma'
+import { plainToClass } from 'class-transformer'
 
 export const createBilling = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const {
-    clientId,
-    initialDate,
-    finalDate,
-    planType,
-    paymentMethod,
-    amount,
-    paymentDate,
-  } = req.body
-
-  const dto = new CreateBillingDto(req.body)
+  const dto = plainToClass(CreateBillingDto, req.body)
 
   try {
     await validateOrReject(dto)
@@ -29,33 +21,36 @@ export const createBilling = async (
   }
 
   try {
-    const client = await pool.query('SELECT * FROM clients WHERE id = $1', [
-      dto.clientId,
-    ])
+    const client = await prismaClient.client.findFirst({
+      where: { id: dto.clientId },
+    })
 
-    if (client.rows.length === 0) {
+    if (!client) {
       res
         .status(404)
         .json({ error: 'No se encontró un Negocio con ese ID asociado' })
       return
     }
 
-    const newSale = await pool.query(
-      'INSERT INTO billings (initial_date, final_date, plan_id, client_id, payment_id, usage, amount, payment_date) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
-      [
-        initialDate,
-        finalDate,
-        planType,
-        clientId,
-        paymentMethod,
-        amount,
-        paymentDate,
-      ]
-    )
+    const now = new Date()
+    const [hours, minutes, seconds] = dto.usage.split(':').map(Number)
+    now.setHours(hours, minutes, seconds)
+    dto.usage = now.toISOString() // TODO: Check if this is the correct format
 
-    res
-      .status(201)
-      .json({ message: 'Compra Registrada', sale: newSale.rows[0] })
+    const newSale = await prismaClient.billing.create({
+      data: {
+        client: { connect: { id: dto.clientId } },
+        initialDate: dto.initialDate,
+        finalDate: dto.finalDate,
+        plan: { connect: { type: dto.planType } },
+        payment: { connect: { method: dto.paymentMethod } },
+        amount: dto.amount,
+        paymentDate: dto.paymentDate,
+        usage: dto.usage,
+      },
+    })
+
+    res.status(201).json({ message: 'Compra Registrada', sale: newSale })
   } catch (error: unknown) {
     console.error('Error al registrar venta:', error)
     res.status(500).json({ error: 'Error interno del servidor' })

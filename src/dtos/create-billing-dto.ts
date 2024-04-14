@@ -1,10 +1,38 @@
-import { IsInt } from 'class-validator'
+import { Transform } from 'class-transformer'
+import {
+  IsDateString,
+  IsInt,
+  IsPositive,
+  IsString,
+  Matches,
+} from 'class-validator'
 
 export class CreateBillingDto {
   @IsInt()
   public clientId: number
 
-  constructor(any: any) {
-    this.clientId = any.clientId
-  }
+  @IsDateString()
+  @Transform(({ value }) => new Date(value).toISOString())
+  public initialDate: string
+
+  @IsDateString()
+  @Transform(({ value }) => new Date(value).toISOString())
+  public finalDate: string
+
+  @IsString()
+  public planType: string
+
+  @IsString()
+  public paymentMethod: string
+
+  @IsInt()
+  @IsPositive()
+  public amount: number
+
+  @IsDateString()
+  @Transform(({ value }) => new Date(value).toISOString())
+  public paymentDate: string
+
+  @Matches(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/)
+  public usage: string
 }

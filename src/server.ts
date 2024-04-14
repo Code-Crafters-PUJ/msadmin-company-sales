@@ -2,6 +2,7 @@ import express, { Application } from 'express'
 
 import { PORT } from './config/environment'
 import { salesRouter } from './routers'
+import { prismaClient } from './db/prisma'
 
 class Server {
   private app: Application
@@ -9,8 +10,13 @@ class Server {
   constructor() {
     this.app = express()
 
+    this.connectDatabase()
     this.middlewares()
     this.routes()
+  }
+
+  private connectDatabase(): void {
+    prismaClient.$connect()
   }
 
   private middlewares(): void {
