@@ -13,6 +13,11 @@ Install dependencies:
 npm install
 ```
 
+Start DB:
+```bash
+docker compose up -d
+```
+
 On dev:
 ```bash
 npm run dev
