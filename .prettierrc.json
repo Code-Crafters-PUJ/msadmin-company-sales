@@ -8,5 +8,5 @@
   "singleQuote": true,
   "arrowParens": "always",
   "bracketSpacing": true,
-  "plugins": ["eslint-config-prettier", "@trivago/prettier-plugin-sort-imports"]
+  "plugins": ["eslint-config-prettier"]
 }

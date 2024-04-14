@@ -1,9 +1,11 @@
+import { validateOrReject } from 'class-validator'
 import { Request, Response } from 'express'
 
 import pool from '../db/pool'
+import { CreateBillingDto } from '../dtos/create-billing-dto'
 import { sendEmail } from '../helpers/emails'
 
-export const registrarVenta = async (
+export const createBilling = async (
   req: Request,
   res: Response
 ): Promise<void> => {
@@ -17,11 +19,19 @@ export const registrarVenta = async (
     paymentDate,
   } = req.body
 
+  const dto = new CreateBillingDto(req.body)
+
   try {
-    const client = await pool.query(
-      'SELECT * FROM client WHERE client_id = $1',
-      [clientId]
-    )
+    await validateOrReject(dto)
+  } catch (errors) {
+    res.status(400).json({ errors: errors })
+    return
+  }
+
+  try {
+    const client = await pool.query('SELECT * FROM clients WHERE id = $1', [
+      dto.clientId,
+    ])
 
     if (client.rows.length === 0) {
       res
@@ -52,7 +62,7 @@ export const registrarVenta = async (
   }
 }
 
-export const obtenerTodasLasVentas = async (
+export const getAllBillings = async (
   req: Request,
   res: Response
 ): Promise<void> => {
@@ -69,7 +79,7 @@ export const obtenerTodasLasVentas = async (
   }
 }
 
-export const obtenerVentasPorNegocio = async (
+export const getAllBillingsByClient = async (
   req: Request,
   res: Response
 ): Promise<void> => {

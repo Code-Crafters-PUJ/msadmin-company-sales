@@ -1,25 +1,24 @@
 import express from 'express'
 
 import {
-  obtenerTodasLasVentas,
-  obtenerVentasPorNegocio,
+  createBilling,
+  getAllBillings,
+  getAllBillingsByClient,
   pruebaEmail,
-  registrarVenta,
 } from '../controllers/sales-controller'
-import {
-  validateSalesOrAdminRole,
-  validateSalesRole,
-} from '../middlewares/validate-role'
+import { validateSalesOrAdminRole, validateSalesRole } from '../middlewares'
 
 const router = express.Router()
 
-router.post('/', [validateSalesRole], registrarVenta)
+router.post('/', [validateSalesRole], createBilling)
 
-router.get('/all', [validateSalesOrAdminRole], obtenerTodasLasVentas)
+router.get('/all', [validateSalesOrAdminRole], getAllBillings)
 
-router.get('/:idNegocio', [validateSalesOrAdminRole], obtenerVentasPorNegocio)
+router.get('/:clientId', [validateSalesOrAdminRole], getAllBillingsByClient)
 
-router.post('/plan', [validateSalesRole], registrarVenta)
+router.post('/plan', [validateSalesRole])
+
+router.get('/plan/:id', [validateSalesRole])
 
 router.post('/email', pruebaEmail)
 

@@ -18,7 +18,7 @@ class Server {
   }
 
   private routes(): void {
-    this.app.use('/venta', salesRouter)
+    this.app.use('/sales', salesRouter)
   }
 
   public start(): void {
