@@ -1,7 +1,6 @@
 import { validateOrReject } from 'class-validator'
 import { Request, Response } from 'express'
 
-import pool from '../db/pool'
 import { CreateBillingDto } from '../dtos/create-billing-dto'
 import { sendEmail } from '../helpers/emails'
 import { prismaClient } from '../db/prisma'
@@ -37,7 +36,7 @@ export const createBilling = async (
     now.setHours(hours, minutes, seconds)
     dto.usage = now.toISOString() // TODO: Check if this is the correct format
 
-    const newSale = await prismaClient.billing.create({
+    const sale = await prismaClient.billing.create({
       data: {
         client: { connect: { id: dto.clientId } },
         initialDate: dto.initialDate,
@@ -50,7 +49,7 @@ export const createBilling = async (
       },
     })
 
-    res.status(201).json({ message: 'Compra Registrada', sale: newSale })
+    res.status(201).json({ message: 'Compra Registrada', sale })
   } catch (error: unknown) {
     console.error('Error al registrar venta:', error)
     res.status(500).json({ error: 'Error interno del servidor' })
@@ -62,13 +61,11 @@ export const getAllBillings = async (
   res: Response
 ): Promise<void> => {
   try {
-    const sales = await pool.query(`
-      SELECT s.*, p.plan_type, c.company_name
-      FROM suscription s
-      JOIN plan p ON s.plan_id = p.plan_id
-      JOIN client c ON s.client_id = c.client_id
-    `)
-    res.json({ sales: sales.rows })
+    const sales = await prismaClient.billing.findMany({
+      where: { status: true },
+      include: { client: true, plan: true, payment: true },
+    })
+    res.json({ sales })
   } catch (error: unknown) {
     console.error('Error al obtener todas las ventas:', error)
   }
@@ -81,25 +78,19 @@ export const getAllBillingsByClient = async (
   const { clientId } = req.params
 
   try {
-    const sales = await pool.query(
-      `
-      SELECT s.*, p.plan_type, c.company_name
-      FROM suscription s
-      JOIN plan p ON s.plan_id = p.plan_id
-      JOIN client c ON s.client_id = c.client_id
-      WHERE s.client_id = $1
-    `,
-      [clientId]
-    )
+    const sales = await prismaClient.billing.findMany({
+      where: { clientId: Number(clientId), status: true },
+      include: { client: true, plan: true, payment: true },
+    })
 
-    if (sales.rows.length === 0) {
+    if (sales.length === 0) {
       res
         .status(404)
         .json({ error: 'No se encontraron ventas para este Negocio' })
       return
     }
 
-    res.json({ ventas: sales.rows })
+    res.json({ sales })
   } catch (error: unknown) {
     console.error('Error al obtener ventas por negocio:', error)
     res.status(500).json({ error: 'Error interno del servidor' })
