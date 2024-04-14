@@ -7,30 +7,45 @@ export const registrarVenta = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const { idNegocio, fechaCompra, fechaExpiracion, tipoPlan, metodoPago } =
-    req.body
+  const {
+    clientId,
+    initialDate,
+    finalDate,
+    planType,
+    paymentMethod,
+    amount,
+    paymentDate,
+  } = req.body
 
   try {
-    const negocio = await pool.query(
+    const client = await pool.query(
       'SELECT * FROM client WHERE client_id = $1',
-      [idNegocio]
+      [clientId]
     )
 
-    if (negocio.rows.length === 0) {
+    if (client.rows.length === 0) {
       res
         .status(404)
         .json({ error: 'No se encontró un Negocio con ese ID asociado' })
       return
     }
 
-    const nuevaVenta = await pool.query(
-      'INSERT INTO suscription (initial_date, final_date, suscription_status, plan_id, client_id, payment_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
-      [fechaCompra, fechaExpiracion, 1, tipoPlan, idNegocio, metodoPago]
+    const newSale = await pool.query(
+      'INSERT INTO billings (initial_date, final_date, plan_id, client_id, payment_id, usage, amount, payment_date) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
+      [
+        initialDate,
+        finalDate,
+        planType,
+        clientId,
+        paymentMethod,
+        amount,
+        paymentDate,
+      ]
     )
 
     res
       .status(201)
-      .json({ message: 'Compra Registrada', venta: nuevaVenta.rows[0] })
+      .json({ message: 'Compra Registrada', sale: newSale.rows[0] })
   } catch (error: unknown) {
     console.error('Error al registrar venta:', error)
     res.status(500).json({ error: 'Error interno del servidor' })
@@ -42,13 +57,13 @@ export const obtenerTodasLasVentas = async (
   res: Response
 ): Promise<void> => {
   try {
-    const ventas = await pool.query(`
+    const sales = await pool.query(`
       SELECT s.*, p.plan_type, c.company_name
       FROM suscription s
       JOIN plan p ON s.plan_id = p.plan_id
       JOIN client c ON s.client_id = c.client_id
     `)
-    res.json({ ventas: ventas.rows })
+    res.json({ sales: sales.rows })
   } catch (error: unknown) {
     console.error('Error al obtener todas las ventas:', error)
   }
@@ -58,10 +73,10 @@ export const obtenerVentasPorNegocio = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const { idNegocio } = req.params
+  const { clientId } = req.params
 
   try {
-    const ventas = await pool.query(
+    const sales = await pool.query(
       `
       SELECT s.*, p.plan_type, c.company_name
       FROM suscription s
@@ -69,17 +84,17 @@ export const obtenerVentasPorNegocio = async (
       JOIN client c ON s.client_id = c.client_id
       WHERE s.client_id = $1
     `,
-      [idNegocio]
+      [clientId]
     )
 
-    if (ventas.rows.length === 0) {
+    if (sales.rows.length === 0) {
       res
         .status(404)
         .json({ error: 'No se encontraron ventas para este Negocio' })
       return
     }
 
-    res.json({ ventas: ventas.rows })
+    res.json({ ventas: sales.rows })
   } catch (error: unknown) {
     console.error('Error al obtener ventas por negocio:', error)
     res.status(500).json({ error: 'Error interno del servidor' })

@@ -1,17 +1,7 @@
 import 'dotenv/config'
-import express from 'express'
 
-import { getEnvVariable } from './config/environment'
-import ventaRoutes from './routes/ventas-routes'
+import Server from './server'
 
-const app = express()
+const server = new Server()
 
-app.use(express.json())
-
-app.use('/venta', ventaRoutes)
-
-const PORT = parseInt(getEnvVariable('PORT', '3000'))
-
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en el puerto ${PORT}`)
-})
+server.start()

@@ -1,13 +1,19 @@
 import { Pool } from 'pg'
 
-import { getEnvVariable } from '../config/environment'
+import {
+  POSTGRES_DB,
+  POSTGRES_HOST,
+  POSTGRES_PASSWORD,
+  POSTGRES_PORT,
+  POSTGRES_USER,
+} from '../config/environment'
 
 const pool = new Pool({
-  user: getEnvVariable('POSTGRES_USER'),
-  host: getEnvVariable('POSTGRES_HOST'),
-  database: getEnvVariable('POSTGRES_DB'),
-  password: getEnvVariable('POSTGRES_PASSWORD'),
-  port: parseInt(getEnvVariable('POSTGRES_PORT')),
+  user: POSTGRES_USER,
+  host: POSTGRES_HOST,
+  database: POSTGRES_DB,
+  password: POSTGRES_PASSWORD,
+  port: POSTGRES_PORT,
 })
 
 export default pool

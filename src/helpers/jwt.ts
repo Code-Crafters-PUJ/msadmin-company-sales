@@ -1,10 +1,10 @@
 import jwt from 'jsonwebtoken'
 
-import { getEnvVariable } from '../config/environment'
+import { JWT_SECRET } from '../config/environment'
 
 export const hasSalesRole = (token: string): boolean => {
   try {
-    const decoded = jwt.verify(token, getEnvVariable('JWT_SECRET')) as {
+    const decoded = jwt.verify(token, JWT_SECRET) as {
       role: string
     }
 
@@ -20,7 +20,7 @@ export const hasSalesRole = (token: string): boolean => {
 }
 export const hasAdminRole = (token: string): boolean => {
   try {
-    const decoded = jwt.verify(token, getEnvVariable('JWT_SECRET')) as {
+    const decoded = jwt.verify(token, JWT_SECRET) as {
       role: string
     }
 

@@ -5,7 +5,7 @@ import {
   obtenerVentasPorNegocio,
   pruebaEmail,
   registrarVenta,
-} from '../controllers/venta-controller'
+} from '../controllers/sales-controller'
 import {
   validateSalesOrAdminRole,
   validateSalesRole,

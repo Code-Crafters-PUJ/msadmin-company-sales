@@ -1,9 +1,9 @@
 import { Resend } from 'resend'
 
-import { getEnvVariable } from '../config/environment'
-import EmailError from '../errors/EmailError'
+import { RESEND_API_KEY } from '../config/environment'
+import { EmailError } from '../errors'
 
-const resend = new Resend(getEnvVariable('RESEND_API_KEY')) // TODO: replace 'API_KEY' with your resend API key
+const resend = new Resend(RESEND_API_KEY)
 
 export const sendEmail = async (
   email: string,
