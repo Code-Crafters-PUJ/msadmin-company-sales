@@ -28,7 +28,7 @@ router.get('/plan/:id', [validateSalesRole])
 router.post(
   '/billing/email',
   [validateSalesOrAdminRole, validateDto(SendBillingEmailDto)],
-  sendBillingEmail
+  sendBillingEmail,
 )
 
 export default router
