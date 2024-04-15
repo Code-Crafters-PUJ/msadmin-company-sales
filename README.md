@@ -20,7 +20,7 @@ docker compose up -d
 
 Run the migrations:
 ```bash
-npx prisma push
+npx prisma db push
 ```
 
 Update migrations:
