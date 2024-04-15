@@ -1,23 +1,15 @@
-import { validateOrReject } from 'class-validator'
 import { Request, Response } from 'express'
 
-import { CreateBillingDto } from '../dtos/create-billing-dto'
+import { CreateBillDto, SendBillingEmailDto } from '../dtos'
 import { sendEmail } from '../helpers/emails'
 import { prismaClient } from '../db/prisma'
 import { plainToClass } from 'class-transformer'
 
-export const createBilling = async (
+export const createBill = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const dto = plainToClass(CreateBillingDto, req.body)
-
-  try {
-    await validateOrReject(dto)
-  } catch (errors) {
-    res.status(400).json({ errors: errors })
-    return
-  }
+  const dto = plainToClass(CreateBillDto, req.body)
 
   try {
     const client = await prismaClient.client.findFirst({
@@ -56,7 +48,7 @@ export const createBilling = async (
   }
 }
 
-export const getAllBillings = async (
+export const getAllBills = async (
   req: Request,
   res: Response
 ): Promise<void> => {
@@ -71,15 +63,20 @@ export const getAllBillings = async (
   }
 }
 
-export const getAllBillingsByClient = async (
+export const getAllBillsByClient = async (
   req: Request,
   res: Response
 ): Promise<void> => {
   const { clientId } = req.params
 
+  if (!Number.isInteger(Number(clientId))) {
+    res.status(400).json({ error: 'ID de Negocio inválido' })
+    return
+  }
+
   try {
     const sales = await prismaClient.billing.findMany({
-      where: { clientId: Number(clientId), status: true },
+      where: { clientId: parseInt(clientId), status: true },
       include: { client: true, plan: true, payment: true },
     })
 
@@ -97,10 +94,48 @@ export const getAllBillingsByClient = async (
   }
 }
 
-export const pruebaEmail = async (req: Request, res: Response) => {
-  const { email, subject, message } = req.body
+export const sendBillingEmail = async (req: Request, res: Response) => {
+  const { email, clientId, nit, subject, message } = plainToClass(
+    SendBillingEmailDto,
+    req.body
+  )
 
-  sendEmail(email, subject, message)
+  if (email) {
+    const client = await prismaClient.client.findFirst({
+      where: { email },
+    })
 
+    if (!client) {
+      res.status(404).json({ error: 'No se encontró un Negocio con ese email' })
+      return
+    }
+
+    sendEmail(email, subject, message)
+  } else if (clientId) {
+    const client = await prismaClient.client.findFirst({
+      where: { id: clientId },
+    })
+
+    if (!client) {
+      res.status(404).json({ error: 'No se encontró un Negocio con ese ID' })
+      return
+    }
+
+    sendEmail(client.email, subject, message)
+  } else if (nit) {
+    const client = await prismaClient.client.findFirst({
+      where: { nit },
+    })
+
+    if (!client) {
+      res.status(404).json({ error: 'No se encontró un Negocio con ese NIT' })
+      return
+    }
+
+    sendEmail(client.email, subject, message)
+  } else {
+    res.status(400).json({ error: 'Se necesita al menos un dato' })
+    return
+  }
   res.json({ info: 'Email enviado', email, subject, message })
 }

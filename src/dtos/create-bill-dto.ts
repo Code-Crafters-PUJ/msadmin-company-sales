@@ -7,7 +7,7 @@ import {
   Matches,
 } from 'class-validator'
 
-export class CreateBillingDto {
+class CreateBillDto {
   @IsInt()
   public clientId: number
 
@@ -36,3 +36,5 @@ export class CreateBillingDto {
   @Matches(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/)
   public usage: string
 }
+
+export default CreateBillDto
