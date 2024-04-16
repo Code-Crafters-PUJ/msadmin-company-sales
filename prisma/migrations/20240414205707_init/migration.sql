@@ -105,9 +105,6 @@ CREATE INDEX "Client_nit_idx" ON "Client"("nit");
 -- CreateIndex
 CREATE UNIQUE INDEX "Payment_method_key" ON "Payment"("method");
 
--- CreateIndex
-CREATE UNIQUE INDEX "Plan_type_key" ON "Plan"("type");
-
 -- AddForeignKey
 ALTER TABLE "Coupon" ADD CONSTRAINT "Coupon_clientId_fkey" FOREIGN KEY ("clientId") REFERENCES "Client"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 

@@ -78,7 +78,7 @@ model Payment {
 
 model Plan {
   id          Int     @id @default(autoincrement())
-  type        String  @unique
+  type        String
   description String
   price       Float
   duration    Int
