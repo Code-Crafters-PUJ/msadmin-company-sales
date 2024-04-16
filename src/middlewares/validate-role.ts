@@ -5,7 +5,7 @@ import { hasAdminRole, hasSalesRole } from '../helpers/jwt'
 export const validateSalesRole = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   const { authorization } = req.headers
 
@@ -27,7 +27,7 @@ export const validateSalesRole = async (
 export const validateSalesOrAdminRole = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   const { authorization } = req.headers
 

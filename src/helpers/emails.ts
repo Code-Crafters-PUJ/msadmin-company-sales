@@ -8,7 +8,7 @@ const resend = new Resend(RESEND_API_KEY)
 export const sendEmail = async (
   email: string,
   subject: string,
-  message: string
+  message: string,
 ): Promise<void> => {
   const emailData = {
     from: 'StockWage Admin <stockwage@santicm.com>',

@@ -18,6 +18,16 @@ Start DB:
 docker compose up -d
 ```
 
+Run the migrations:
+```bash
+npx prisma db push
+```
+
+Update migrations:
+```bash
+npx prisma migrate dev
+```
+
 On dev:
 ```bash
 npm run dev

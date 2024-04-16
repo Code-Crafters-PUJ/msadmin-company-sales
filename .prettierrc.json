@@ -1,9 +1,9 @@
 {
-  "importOrderSortSpecifiers": true,
-  "trailingComma": "es5",
+  "trailingComma": "all",
   "tabWidth": 2,
   "semi": false,
   "singleQuote": true,
   "arrowParens": "always",
-  "bracketSpacing": true
+  "bracketSpacing": true,
+  "endOfLine": "auto"
 }

@@ -7,7 +7,7 @@ import { plainToClass } from 'class-transformer'
 
 export const createBill = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   const dto = plainToClass(CreateBillDto, req.body)
 
@@ -50,7 +50,7 @@ export const createBill = async (
 
 export const getAllBills = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const sales = await prismaClient.billing.findMany({
@@ -65,7 +65,7 @@ export const getAllBills = async (
 
 export const getAllBillsByClient = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   const { clientId } = req.params
 
@@ -97,7 +97,7 @@ export const getAllBillsByClient = async (
 export const sendBillingEmail = async (req: Request, res: Response) => {
   const { email, clientId, nit, subject, message } = plainToClass(
     SendBillingEmailDto,
-    req.body
+    req.body,
   )
 
   if (email) {
