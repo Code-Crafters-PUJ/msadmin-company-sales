@@ -134,7 +134,9 @@ export const sendBillingEmail = async (req: Request, res: Response) => {
 
     sendEmail(client.email, subject, message)
   } else {
-    res.status(400).json({ error: 'Se necesita al menos un dato' })
+    res.status(400).json({
+      error: 'Se necesita al menos un dato entre "email", "nit" y "clientId"',
+    })
     return
   }
   res.json({ info: 'Email enviado', email, subject, message })
