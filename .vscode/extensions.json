@@ -1,0 +1,7 @@
+{
+  "recommendations": [
+    "prettier.vscode-prettier",
+    "eslint.vscode-eslint",
+    "pmneo.tsimporter",
+  ]
+}

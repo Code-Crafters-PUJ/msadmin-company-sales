@@ -15,7 +15,7 @@ services:
     <<: *postgres-common
     container_name: msadmin-company-sales-db
     ports:
-      - 5432:5432
+      - ${POSTGRES_PORT}:5432
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
@@ -31,7 +31,7 @@ services:
       -c hot_standby_feedback=on
     volumes:
       - db_volume:/var/lib/postgresql/data
-      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./db/:/docker-entrypoint-initdb.d
     env_file:
       - .env
 
@@ -39,7 +39,7 @@ services:
     <<: *postgres-common
     container_name: msadmin-company-sales-db-replica
     ports:
-      - 5433:5432
+      - ${POSTGRES_PORT_REPLICA}:5432
     environment:
       PGUSER: replicator
       PGPASSWORD: replicator_password
