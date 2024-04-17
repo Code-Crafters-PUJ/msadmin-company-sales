@@ -50,7 +50,6 @@ model Billing {
   id          Int      @id @default(autoincrement())
   initialDate DateTime
   finalDate   DateTime
-  usage       DateTime @db.Time()
   paymentDate DateTime
   amount      Float
   status      Boolean  @default(true)
@@ -90,8 +89,7 @@ model Plan {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
-  @@unique([type, duration])
-  @@index([type, duration])
+  @@unique([type, duration], name: "type_duration")
 }
 
 model Service {

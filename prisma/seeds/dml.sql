@@ -20,8 +20,8 @@ INSERT INTO "Payment" (method)
 VALUES ('Bank Transfer');
 
 -- Insert billings
-INSERT INTO "Billing" ("initialDate", "finalDate", usage, "planId", "clientId", "paymentId", amount, "paymentDate")
-VALUES ('2024-03-29', '2024-04-28', '00:30:45', 1, 1, 1, 100.00, '2024-03-29');  -- Silver plan for Tech Inc.
+INSERT INTO "Billing" ("initialDate", "finalDate", "planId", "clientId", "paymentId", amount, "paymentDate")
+VALUES ('2024-03-29', '2024-04-28', 1, 1, 1, 100.00, '2024-03-29');  -- Silver plan for Tech Inc.
 
-INSERT INTO "Billing" ("initialDate", "finalDate", usage, "planId", "clientId", "paymentId", amount, "paymentDate")
-VALUES ('2024-03-29', '2025-03-28', '12:30:45', 2, 2, 2, 200.00, '2024-03-29');  -- Gold plan for Marketing Solutions
+INSERT INTO "Billing" ("initialDate", "finalDate", "planId", "clientId", "paymentId", amount, "paymentDate")
+VALUES ('2024-03-29', '2025-03-28', 2, 2, 2, 200.00, '2024-03-29');  -- Gold plan for Marketing Solutions

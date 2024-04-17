@@ -28,7 +28,11 @@ export const createBill = async (
         client: { connect: { id: dto.clientId } },
         initialDate: dto.initialDate,
         finalDate: dto.finalDate,
-        plan: { connect: { type: dto.planType, duration: dto.duration } },
+        plan: {
+          connect: {
+            type_duration: { type: dto.planType, duration: dto.duration },
+          },
+        },
         payment: { connect: { method: dto.paymentMethod } },
         amount: dto.amount,
         paymentDate: dto.paymentDate,
@@ -81,7 +85,7 @@ export const getAllBillsByClient = async (
       return
     }
 
-    res.json({ sales })
+    res.json(sales[0])
   } catch (error: unknown) {
     console.error('Error al obtener ventas por negocio:', error)
     res.status(500).json({ error: 'Error interno del servidor' })
