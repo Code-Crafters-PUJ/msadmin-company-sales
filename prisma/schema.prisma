@@ -81,6 +81,7 @@ model Plan {
   description String
   price       Float
   duration    Int
+  accounts    Int
   status      Boolean @default(true)
 
   billings Billing[]
