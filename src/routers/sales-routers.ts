@@ -2,8 +2,10 @@ import express from 'express'
 
 import {
   createBill,
+  createPlan,
   getAllBills,
   getAllBillsByClient,
+  getAllplans,
   sendBillingEmail,
 } from '../controllers/sales-controller'
 import {
@@ -30,5 +32,9 @@ router.post(
   [validateSalesOrAdminRole, validateDto(SendBillingEmailDto)],
   sendBillingEmail,
 )
+
+router.post('/plan/add', [validateSalesOrAdminRole], createPlan)
+
+router.get('/plan/all', [validateSalesOrAdminRole], getAllplans)
 
 export default router
