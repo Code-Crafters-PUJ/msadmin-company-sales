@@ -1,11 +1,5 @@
 import { Transform } from 'class-transformer'
-import {
-  IsDateString,
-  IsInt,
-  IsPositive,
-  IsString,
-  Matches,
-} from 'class-validator'
+import { IsDateString, IsInt, IsPositive, IsString } from 'class-validator'
 
 class CreateBillDto {
   @IsInt()
@@ -33,8 +27,8 @@ class CreateBillDto {
   @Transform(({ value }) => new Date(value).toISOString())
   public paymentDate: string
 
-  @Matches(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/)
-  public usage: string
+  @IsInt()
+  public duration: number
 }
 
 export default CreateBillDto
