@@ -89,6 +89,9 @@ model Plan {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+
+  @@unique([type, duration])
+  @@index([type, duration])
 }
 
 model Service {

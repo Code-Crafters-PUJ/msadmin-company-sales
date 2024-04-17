@@ -23,21 +23,15 @@ export const createBill = async (
       return
     }
 
-    const now = new Date()
-    const [hours, minutes, seconds] = dto.usage.split(':').map(Number)
-    now.setHours(hours, minutes, seconds)
-    dto.usage = now.toISOString() // TODO: Check if this is the correct format
-
     const sale = await prismaClient.billing.create({
       data: {
         client: { connect: { id: dto.clientId } },
         initialDate: dto.initialDate,
         finalDate: dto.finalDate,
-        plan: { connect: { type: dto.planType } },
+        plan: { connect: { type: dto.planType, duration: dto.duration } },
         payment: { connect: { method: dto.paymentMethod } },
         amount: dto.amount,
         paymentDate: dto.paymentDate,
-        usage: dto.usage,
       },
     })
 
