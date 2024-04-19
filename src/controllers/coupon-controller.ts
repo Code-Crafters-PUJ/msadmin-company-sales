@@ -33,6 +33,12 @@ export const getAllCoupons = async (req: Request, res: Response) => {
       where: {
         status: true,
       },
+      select: {
+        code: true,
+        discount: true,
+        duration: true,
+        expirationDate: true,
+      },
     })
 
     res.status(200).json({ coupons })
