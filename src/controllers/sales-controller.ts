@@ -139,3 +139,11 @@ export const sendBillingEmail = async (req: Request, res: Response) => {
   }
   res.json({ info: 'Email enviado', email, subject, message })
 }
+
+// export const ejemplo = async () => {
+//   const plans = await prismaClient.plan.findMany({
+//     where: {
+//       status: true,
+//     },
+//   })
+// }
