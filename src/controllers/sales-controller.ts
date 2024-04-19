@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 
-import { CreateBillDto, SendBillingEmailDto } from '../dtos'
+import { CreateBillDto, CreatePlanDto, SendBillingEmailDto } from '../dtos'
 import { sendEmail } from '../helpers/emails'
 import { prismaClient } from '../db/prisma'
 import { plainToClass } from 'class-transformer'
@@ -147,3 +147,39 @@ export const sendBillingEmail = async (req: Request, res: Response) => {
 //     },
 //   })
 // }
+
+export const createPlan = async (req: Request, res: Response) => {
+  const dto = plainToClass(CreatePlanDto, req.body)
+  const description = ''
+  const duration: number[] = [3, 6, 12]
+  let i = 0
+  try {
+    for (const p of dto.price) {
+      await prismaClient.plan.create({
+        data: {
+          type: dto.type,
+          price: p,
+          accounts: dto.accounts,
+          status: dto.status,
+          description: description,
+          duration: duration[i],
+        },
+      })
+      i = i + 1
+    }
+  } catch (error: unknown) {
+    console.error('Error al registrar plan:', error)
+    res.status(500).json({ error: 'Error interno del servidor' })
+  }
+  res.json({ message: 'Plan creado' })
+}
+
+export const getAllplans = async (req: Request, res: Response) => {
+  try {
+    const plans = await prismaClient.plan.findMany()
+    res.json({ plans })
+  } catch (error: unknown) {
+    console.error('Error al obtener todos los planes:', error)
+    res.status(500).json({ error: 'Error interno del servidor' })
+  }
+}
