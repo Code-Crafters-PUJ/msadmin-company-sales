@@ -3,6 +3,7 @@ import express, { Application } from 'express'
 import { PORT } from './config/environment'
 import { salesRouter } from './routers'
 import { prismaClient } from './db/prisma'
+import cors from 'cors'
 
 class Server {
   private app: Application
@@ -20,6 +21,7 @@ class Server {
   }
 
   private middlewares(): void {
+    this.app.use(cors())
     this.app.use(express.json())
   }
 
