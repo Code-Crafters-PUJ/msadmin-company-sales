@@ -97,6 +97,7 @@ model Service {
   id     Int     @id @default(autoincrement())
   name   String
   status Boolean @default(true)
+  users  Int
 
   plans PlanHasService[]
 

@@ -25,3 +25,10 @@ VALUES ('2024-03-29', '2024-04-28', 1, 1, 1, 100.00, '2024-03-29');  -- Silver p
 
 INSERT INTO "Billing" ("initialDate", "finalDate", "planId", "clientId", "paymentId", amount, "paymentDate")
 VALUES ('2024-03-29', '2025-03-28', 2, 2, 2, 200.00, '2024-03-29');  -- Gold plan for Marketing Solutions
+
+-- Insert sales
+INSERT INTO "Service" (name, "updatedAt", users, status)
+VALUES ('Nómina', '2024-04-19', 100,  true);
+
+INSERT INTO "Service" (name, "updatedAt", users, status)
+VALUES ('Ventas', '2024-04-18', 1000,  true);
