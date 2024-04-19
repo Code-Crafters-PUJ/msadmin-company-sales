@@ -1,8 +1,8 @@
 import { Request, Response } from 'express'
 import { plainToClass } from 'class-transformer'
-import { prismaClient } from 'src/db/prisma'
 
 import { CreatePlanDto } from '../dtos'
+import { prismaClient } from '../db/prisma'
 
 export const createPlan = async (req: Request, res: Response) => {
   const dto = plainToClass(CreatePlanDto, req.body)
