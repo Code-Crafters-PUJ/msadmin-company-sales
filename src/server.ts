@@ -1,7 +1,7 @@
 import express, { Application } from 'express'
 
 import { PORT } from './config/environment'
-import { plansRouter, salesRouter, servicesRouter} from './routers'
+import { plansRouter, salesRouter, servicesRouter, couponRouter} from './routers'
 import { prismaClient } from './db/prisma'
 import cors from 'cors'
 
@@ -29,6 +29,7 @@ class Server {
     this.app.use('/sales', salesRouter)
     this.app.use('/plans', plansRouter)
     this.app.use('/services', servicesRouter)
+    this.app.use('/coupon', couponRouter)
   }
 
   public start(): void {

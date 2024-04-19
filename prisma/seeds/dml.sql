@@ -32,3 +32,10 @@ VALUES ('Nómina', '2024-04-19', 100,  true);
 
 INSERT INTO "Service" (name, "updatedAt", users, status)
 VALUES ('Ventas', '2024-04-18', 1000,  true);
+
+-- Insert coupons
+INSERT INTO "Coupon" ("code", "duration", "discount", "expirationDate", "status", "clientId")
+VALUES ('DISCOUNT10', '10:00:00', 10, '2024-04-20', true, 1);
+
+INSERT INTO "Coupon" ("code", "duration", "discount", "expirationDate", "status", "clientId")
+VALUES ('DISCOUNT15', '10:00:00', 15, '2024-04-20', true, 2);
