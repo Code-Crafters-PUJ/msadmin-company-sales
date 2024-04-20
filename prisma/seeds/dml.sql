@@ -6,11 +6,14 @@ INSERT INTO "Client" ("companyName", "contactName", email, telephone, nit)
 VALUES ('Marketing Solutions', 'Jane Smith', 'jane.smith@marketingsolutions.com', 9876543210, 987654321);
 
 -- Insert plans
-INSERT INTO "Plan" (type, price, description, duration)
-VALUES ('Silver', 100.00, 'Limited features, ideal for small businesses', 12);
+INSERT INTO "Plan" (type, price, description, duration, users)
+VALUES ('Silver', 100.00, 'Limited features, ideal for small businesses', 12, 100);
 
-INSERT INTO "Plan" (type, price, description, duration)
-VALUES ('Gold', 200.00, 'Full features, suitable for growing businesses', 6);
+INSERT INTO "Plan" (type, price, description, duration, users)
+VALUES ('Gold', 200.00, 'Full features, suitable for growing businesses', 6, 1000);
+
+INSERT INTO "Plan" (type, "companyName", "duration", status)
+VALUES ('Silver', 'Tech Inc.', 12, true);
 
 -- Insert payments
 INSERT INTO "Payment" (method)
@@ -35,7 +38,7 @@ VALUES ('Ventas', '2024-04-18', 1000,  true);
 
 -- Insert coupons
 INSERT INTO "Coupon" ("code", "duration", "discount", "expirationDate", "status", "clientId")
-VALUES ('DISCOUNT10', '10:00:00', 10, '2024-04-20', true, 1);
+VALUES ('DISCOUNT10', 3, 10, '2024-04-20', true, 1);
 
 INSERT INTO "Coupon" ("code", "duration", "discount", "expirationDate", "status", "clientId")
-VALUES ('DISCOUNT15', '10:00:00', 15, '2024-04-20', true, 2);
+VALUES ('DISCOUNT15', 3, 15, '2024-04-20', true, 2);

@@ -12,9 +12,8 @@ class CreateCouponDto {
   @IsPositive()
   public discount: number
 
-  @IsDateString()
-  @Transform(({ value }) => new Date(value).toISOString())
-  public duration: string
+  @IsInt()
+  public duration: number
 
   @IsDateString()
   @Transform(({ value }) => new Date(value).toISOString())

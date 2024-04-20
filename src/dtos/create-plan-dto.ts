@@ -10,7 +10,7 @@ class CreatePlanDto {
 
   @IsInt()
   @IsPositive()
-  public accounts: number
+  public users: number
 
   @IsString({ each: true })
   public services: string[]

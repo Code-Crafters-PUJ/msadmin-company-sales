@@ -16,7 +16,7 @@ export const createPlan = async (req: Request, res: Response) => {
         data: {
           type: dto.type,
           price: p,
-          accounts: dto.accounts,
+          users: dto.users,
           status: dto.status,
           description: description,
           duration: duration[i],
@@ -36,6 +36,9 @@ export const getAllplans = async (req: Request, res: Response) => {
     plans: await prismaClient.plan.findMany({
       where: {
         status: true,
+        price: {
+          gt: 0,
+        },
       },
     }),
   })
