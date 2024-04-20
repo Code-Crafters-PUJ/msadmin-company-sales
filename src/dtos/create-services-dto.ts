@@ -1,6 +1,6 @@
 import { Transform } from 'class-transformer'
 import { IsBoolean, IsDateString, IsInt, IsString } from 'class-validator'
-import { transformToDate } from 'src/helpers/transform'
+import { transformToDate } from '../helpers/transform'
 
 class CreateServiceDto {
   @IsString()
