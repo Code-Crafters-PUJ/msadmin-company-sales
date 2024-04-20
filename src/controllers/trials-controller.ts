@@ -69,5 +69,3 @@ export const getAlltrials = async (req: Request, res: Response) => {
     await prismaClient.$disconnect()
   }
 }
-
-export default { createTrial, getAlltrials }

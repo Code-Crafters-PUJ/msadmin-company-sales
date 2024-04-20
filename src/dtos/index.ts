@@ -11,5 +11,5 @@ export {
   CreatePlanDto,
   CreateServiceDto,
   CreateCouponDto,
-  CreateTrialDto
+  CreateTrialDto,
 }

@@ -1,16 +1,17 @@
 import { Transform } from 'class-transformer'
 import { IsDateString, IsInt, IsPositive, IsString } from 'class-validator'
+import { transformToDate } from 'src/helpers/transform'
 
 class CreateBillDto {
   @IsInt()
   public clientId: number
 
   @IsDateString()
-  @Transform(({ value }) => new Date(value).toISOString())
+  @Transform(transformToDate)
   public initialDate: string
 
   @IsDateString()
-  @Transform(({ value }) => new Date(value).toISOString())
+  @Transform(transformToDate)
   public finalDate: string
 
   @IsString()
@@ -24,7 +25,7 @@ class CreateBillDto {
   public amount: number
 
   @IsDateString()
-  @Transform(({ value }) => new Date(value).toISOString())
+  @Transform(transformToDate)
   public paymentDate: string
 
   @IsInt()

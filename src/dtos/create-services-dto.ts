@@ -1,19 +1,20 @@
 import { Transform } from 'class-transformer'
-import { IsBoolean, IsDateString, IsInt, IsString  } from 'class-validator'
+import { IsBoolean, IsDateString, IsInt, IsString } from 'class-validator'
+import { transformToDate } from 'src/helpers/transform'
 
 class CreateServiceDto {
-    @IsString()
-    public name: string;
-  
-    @IsDateString()
-    @Transform(({ value }) => new Date(value).toISOString())
-    public updatedAt: string
-  
-    @IsInt()
-    public users: number;
-  
-    @IsBoolean()
-    public status: boolean;
+  @IsString()
+  public name: string
+
+  @IsDateString()
+  @Transform(transformToDate)
+  public updatedAt: string
+
+  @IsInt()
+  public users: number
+
+  @IsBoolean()
+  public status: boolean
 }
-  
-export default CreateServiceDto;
+
+export default CreateServiceDto

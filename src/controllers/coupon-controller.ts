@@ -47,5 +47,3 @@ export const getAllCoupons = async (req: Request, res: Response) => {
     res.status(500).json({ error: 'Error interno del servidor' })
   }
 }
-
-export default { createCoupon, getAllCoupons }

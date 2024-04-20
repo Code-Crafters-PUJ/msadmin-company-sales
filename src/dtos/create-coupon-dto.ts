@@ -1,5 +1,6 @@
 import { Transform } from 'class-transformer'
 import { IsDateString, IsInt, IsString, IsPositive } from 'class-validator'
+import { transformToDate } from 'src/helpers/transform'
 
 class CreateCouponDto {
   @IsString()
@@ -16,7 +17,7 @@ class CreateCouponDto {
   public duration: number
 
   @IsDateString()
-  @Transform(({ value }) => new Date(value).toISOString())
+  @Transform(transformToDate)
   public expirationDate: string
 }
 

@@ -4,6 +4,7 @@ import { CreateBillDto, SendBillingEmailDto } from '../dtos'
 import { sendEmail } from '../helpers/emails'
 import { prismaClient } from '../db/prisma'
 import { plainToClass } from 'class-transformer'
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 
 export const createBill = async (
   req: Request,
@@ -41,6 +42,10 @@ export const createBill = async (
 
     res.status(201).json({ message: 'Compra Registrada', sale })
   } catch (error: unknown) {
+    if (error instanceof PrismaClientKnownRequestError) {
+      res.status(400).json({ error: error.message })
+      return
+    }
     console.error('Error al registrar venta:', error)
     res.status(500).json({ error: 'Error interno del servidor' })
   }
@@ -138,4 +143,38 @@ export const sendBillingEmail = async (req: Request, res: Response) => {
     return
   }
   res.json({ info: 'Email enviado', email, subject, message })
+}
+
+export const getBillStatsByPeriod = async (req: Request, res: Response) => {
+  try {
+    const today = await prismaClient.billing.count({
+      where: {
+        createdAt: {
+          gte: new Date(new Date().setHours(0, 0, 0, 0)),
+          lt: new Date(new Date().setHours(23, 59, 59, 999)),
+        },
+      },
+    })
+
+    const lastMonth = await prismaClient.billing.count({
+      where: {
+        createdAt: {
+          gte: new Date(new Date().setMonth(new Date().getMonth() - 1)),
+        },
+      },
+    })
+
+    const lastYear = await prismaClient.billing.count({
+      where: {
+        createdAt: {
+          gte: new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
+        },
+      },
+    })
+
+    res.json({ today, lastMonth, lastYear })
+  } catch (error: unknown) {
+    console.error('Error al obtener ventas por periodo:', error)
+    res.status(500).json({ error: 'Error interno del servidor' })
+  }
 }

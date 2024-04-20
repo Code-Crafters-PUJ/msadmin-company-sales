@@ -51,5 +51,3 @@ export const getAllServices = async (
     res.status(500).json({ error: 'Error interno del servidor' })
   }
 }
-
-export default { createService, getAllServices }

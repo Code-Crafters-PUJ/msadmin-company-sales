@@ -4,11 +4,11 @@ import { NextFunction, Request, Response } from 'express'
 
 export const validateDto = (dtoType: { new (): object }) => {
   return async (req: Request, res: Response, next: NextFunction) => {
-    const dto = plainToClass(dtoType, req.body)
     try {
+      const dto = plainToClass(dtoType, req.body)
       await validateOrReject(dto)
-    } catch (errors) {
-      res.status(400).json({ errors: errors })
+    } catch (error) {
+      res.status(400).json({ errors: error })
       return
     }
     next()
