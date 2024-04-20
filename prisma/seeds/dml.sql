@@ -12,8 +12,8 @@ VALUES ('Silver', 100.00, 'Limited features, ideal for small businesses', 12, 10
 INSERT INTO "Plan" (type, price, description, duration, users)
 VALUES ('Gold', 200.00, 'Full features, suitable for growing businesses', 6, 1000);
 
-INSERT INTO "Plan" (type, "companyName", "duration", status)
-VALUES ('Silver', 'Tech Inc.', 12, true);
+INSERT INTO "Plan" (type, price, description, duration, users)
+VALUES ('Silver Trial', 0.00, 'Limited features, ideal for small businesses trial', 1, 15);
 
 -- Insert payments
 INSERT INTO "Payment" (method)
@@ -30,11 +30,11 @@ INSERT INTO "Billing" ("initialDate", "finalDate", "planId", "clientId", "paymen
 VALUES ('2024-03-29', '2025-03-28', 2, 2, 2, 200.00, '2024-03-29');  -- Gold plan for Marketing Solutions
 
 -- Insert sales
-INSERT INTO "Service" (name, "updatedAt", users, status)
-VALUES ('Nómina', '2024-04-19', 100,  true);
+INSERT INTO "Service" (name, users, status)
+VALUES ('Nómina', 100,  true);
 
 INSERT INTO "Service" (name, "updatedAt", users, status)
-VALUES ('Ventas', '2024-04-18', 1000,  true);
+VALUES ('Ventas', 1000,  true);
 
 -- Insert coupons
 INSERT INTO "Coupon" ("code", "duration", "discount", "expirationDate", "status", "clientId")

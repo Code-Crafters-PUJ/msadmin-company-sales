@@ -1,6 +1,6 @@
 import express from 'express'
 
-import { createCoupon, getAllCoupons } from '../controllers/coupon-controller'
+import { createCoupon, getAllCoupons } from '../controllers'
 
 const router = express.Router()
 

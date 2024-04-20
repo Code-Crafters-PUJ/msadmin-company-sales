@@ -3,7 +3,10 @@ import { plainToClass } from 'class-transformer'
 import { CreateTrialDto } from '../dtos'
 import { prismaClient } from '../db/prisma'
 
-export const createTrial = async (req: Request, res: Response): Promise<void> => {
+export const createTrial = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
   const dto = plainToClass(CreateTrialDto, req.body)
 
   try {
@@ -19,8 +22,8 @@ export const createTrial = async (req: Request, res: Response): Promise<void> =>
     })
 
     res
-    .status(201)
-    .json({ message: 'Trial creado correctamente', trial: newTrial })
+      .status(201)
+      .json({ message: 'Trial creado correctamente', trial: newTrial })
   } catch (error) {
     console.error('Error al registrar plan:', error)
     res.status(500).json({ error: 'Error interno del servidor' })

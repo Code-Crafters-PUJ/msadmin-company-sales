@@ -4,5 +4,4 @@ import servicesRouter from './services-routers'
 import couponRouter from './coupon-routers'
 import trialsRouter from './trials-routers'
 
-export { salesRouter, plansRouter, servicesRouter, couponRouter, trialsRouter}
-
+export { salesRouter, plansRouter, servicesRouter, couponRouter, trialsRouter }
