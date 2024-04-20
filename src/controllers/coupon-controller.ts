@@ -3,6 +3,7 @@ import { Request, Response } from 'express'
 import { CreateCouponDto } from '../dtos'
 import { prismaClient } from '../db/prisma'
 import { plainToClass } from 'class-transformer'
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 
 export const createCoupon = async (req: Request, res: Response) => {
   const dto = plainToClass(CreateCouponDto, req.body)
@@ -11,7 +12,7 @@ export const createCoupon = async (req: Request, res: Response) => {
     const newCoupon = await prismaClient.coupon.create({
       data: {
         code: dto.code,
-        clientId: dto.clientId,
+        client: { connect: { id: dto.clientId } },
         discount: dto.discount,
         duration: dto.duration,
         expirationDate: dto.expirationDate,
@@ -22,6 +23,14 @@ export const createCoupon = async (req: Request, res: Response) => {
       .status(201)
       .json({ message: 'Cupon creado correctamente', coupon: newCoupon })
   } catch (error) {
+    if (error instanceof PrismaClientKnownRequestError) {
+      const cause = error.meta?.cause.toString()
+      if (cause.includes('Client')) {
+        res.status(404).json({
+          error: `No se encontró un Negocio con el ID '${dto.clientId}'`,
+        })
+      }
+    }
     console.error('Error al crear cupon:', error)
     res.status(500).json({ error: 'Error interno del servidor' })
   }
@@ -33,11 +42,8 @@ export const getAllCoupons = async (req: Request, res: Response) => {
       where: {
         status: true,
       },
-      select: {
-        code: true,
-        discount: true,
-        duration: true,
-        expirationDate: true,
+      include: {
+        client: true,
       },
     })
 

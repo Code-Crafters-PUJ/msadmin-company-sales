@@ -1,4 +1,11 @@
-import { IsBoolean, IsInt, IsPositive, IsString } from 'class-validator'
+import {
+  ArrayMaxSize,
+  ArrayMinSize,
+  IsBoolean,
+  IsInt,
+  IsPositive,
+  IsString,
+} from 'class-validator'
 
 class CreatePlanDto {
   @IsString()
@@ -6,6 +13,8 @@ class CreatePlanDto {
 
   @IsInt({ each: true })
   @IsPositive({ each: true })
+  @ArrayMinSize(3)
+  @ArrayMaxSize(3)
   public price: number[]
 
   @IsInt()

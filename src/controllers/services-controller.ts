@@ -37,12 +37,6 @@ export const getAllServices = async (
       where: {
         status: true,
       },
-      select: {
-        name: true,
-        status: true,
-        users: true,
-        updatedAt: true,
-      },
     })
 
     res.status(200).json({ services })

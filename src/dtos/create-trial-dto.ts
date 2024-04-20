@@ -4,10 +4,6 @@ class CreateTrialDto {
   @IsString()
   public type: string
 
-  @IsInt({ each: true })
-  @IsPositive({ each: true })
-  public price: number
-
   @IsInt()
   @IsPositive()
   public users: number

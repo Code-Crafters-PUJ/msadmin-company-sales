@@ -18,9 +18,9 @@ export const createBill = async (
     })
 
     if (!client) {
-      res
-        .status(404)
-        .json({ error: 'No se encontró un Negocio con ese ID asociado' })
+      res.status(404).json({
+        error: `No se encontró un Negocio con el ID '${dto.clientId}'`,
+      })
       return
     }
 

@@ -13,7 +13,7 @@ export const createTrial = async (
     const newTrial = await prismaClient.plan.create({
       data: {
         type: dto.type,
-        price: dto.price,
+        price: 0,
         users: dto.users,
         duration: dto.duration,
         status: dto.status,
@@ -47,21 +47,20 @@ export const getAlltrials = async (req: Request, res: Response) => {
     })
 
     const formattedPlans = plansWithClients.map((plan) => {
-      const { type, duration, status, billings } = plan
+      const { type, duration, billings } = plan
 
       const clients = billings.map((billing) => billing.client)
 
       const companyNames = clients.map((client) => client.companyName)
 
       return {
-        empresa: companyNames.join(', '),
-        plan: type,
-        duracion: duration,
-        estado: status,
+        clients: companyNames,
+        type,
+        duration,
       }
     })
 
-    res.json({ plans: formattedPlans })
+    res.json({ trials: formattedPlans })
   } catch (error) {
     console.error('Error al obtener planes:', error)
     res.status(500).json({ error: 'Error interno del servidor' })
