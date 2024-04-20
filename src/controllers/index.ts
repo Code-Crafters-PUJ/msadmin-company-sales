@@ -1,2 +1,5 @@
 export * from './sales-controller'
 export * from './plans-controller'
+export * from './services-controller'
+export * from './coupon-controller'
+export * from './trials-controller'

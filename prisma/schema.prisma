@@ -34,7 +34,7 @@ model Client {
 
 model Coupon {
   code           String   @id
-  duration       DateTime @db.Time()
+  duration       Int
   discount       Int
   expirationDate DateTime
   status         Boolean  @default(true)
@@ -81,7 +81,7 @@ model Plan {
   description String
   price       Float
   duration    Int
-  accounts    Int
+  users       Int
   status      Boolean @default(true)
 
   billings Billing[]
@@ -97,6 +97,7 @@ model Service {
   id     Int     @id @default(autoincrement())
   name   String
   status Boolean @default(true)
+  users  Int
 
   plans PlanHasService[]
 
