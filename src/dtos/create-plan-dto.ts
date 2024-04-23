@@ -16,10 +16,6 @@ class CreatePlanDto {
   @IsPositive()
   public anualPrice: number
 
-  @IsInt()
-  @IsPositive()
-  public users: number
-
   @IsString({ each: true })
   public services: string[]
 

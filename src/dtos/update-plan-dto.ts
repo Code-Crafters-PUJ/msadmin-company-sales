@@ -23,11 +23,6 @@ class UpdatePlanDto {
   public anualPrice: number
 
   @IsOptional()
-  @IsInt()
-  @IsPositive()
-  public users: number
-
-  @IsOptional()
   @IsString({ each: true })
   public services: string[]
 

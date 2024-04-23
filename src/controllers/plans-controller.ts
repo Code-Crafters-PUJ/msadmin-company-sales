@@ -3,7 +3,7 @@ import { plainToClass } from 'class-transformer'
 
 import { CreatePlanDto } from '../dtos'
 import { prismaClient } from '../db/prisma'
-import UpdatePlanDto from 'src/dtos/update-plan_dto'
+import UpdatePlanDto from 'src/dtos/update-plan-dto'
 
 export const createPlan = async (req: Request, res: Response) => {
   const dto = plainToClass(CreatePlanDto, req.body)
@@ -23,7 +23,7 @@ export const createPlan = async (req: Request, res: Response) => {
         data: {
           type: dto.type,
           price: p,
-          users: dto.users,
+          users: 0,
           status: dto.status,
           description: description,
           duration: duration[i],
@@ -62,7 +62,6 @@ export const updatePlan = async (req: Request, res: Response) => {
         where: { id: plan.id },
         data: {
           price: prices[i],
-          users: dto.users,
           status: dto.status,
         },
       })

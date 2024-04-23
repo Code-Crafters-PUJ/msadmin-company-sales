@@ -11,7 +11,7 @@ import {
   validateSalesOrAdminRole,
   validateSalesRole,
 } from '../middlewares'
-import { CreatePlanDto } from '../dtos'
+import { CreatePlanDto, UpdatePlanDto } from '../dtos'
 
 const router = express.Router()
 
@@ -21,7 +21,11 @@ router.get('/all', [validateSalesOrAdminRole], getAllplans)
 
 router.get('/:type', [validateSalesOrAdminRole], getPlanByType)
 
-router.put('/:type', [validateSalesRole], updatePlan)
+router.put(
+  '/:type',
+  [validateSalesRole, validateDto(UpdatePlanDto)],
+  updatePlan,
+)
 
 router.delete('/:type', [validateSalesRole], deletePlan)
 
