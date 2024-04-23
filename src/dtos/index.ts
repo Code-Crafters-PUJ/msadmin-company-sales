@@ -6,6 +6,8 @@ import CreateCouponDto from './create-coupon-dto'
 import CreateTrialDto from './create-trial-dto'
 import UpdatePlanDto from 'src/dtos/update-plan-dto'
 import UpdateCouponDto from './update-coupon-dto'
+import UpdateTrialDto from './update-trial-dto'
+import UpdateServiceDto from './update-service-dto'
 
 export {
   CreateBillDto,
@@ -16,4 +18,6 @@ export {
   CreateTrialDto,
   UpdatePlanDto,
   UpdateCouponDto,
+  UpdateTrialDto,
+  UpdateServiceDto,
 }

@@ -1,12 +1,10 @@
-import {
-  IsBoolean,
-  IsInt,
-  IsOptional,
-  IsPositive,
-  IsString,
-} from 'class-validator'
+import { IsInt, IsOptional, IsPositive, IsString } from 'class-validator'
 
 class UpdatePlanDto {
+  @IsOptional()
+  @IsString()
+  public type: string
+
   @IsOptional()
   @IsInt()
   @IsPositive()
@@ -25,10 +23,6 @@ class UpdatePlanDto {
   @IsOptional()
   @IsString({ each: true })
   public services: string[]
-
-  @IsOptional()
-  @IsBoolean()
-  public status: boolean
 }
 
 export default UpdatePlanDto

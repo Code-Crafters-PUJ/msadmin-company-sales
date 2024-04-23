@@ -1,4 +1,4 @@
-import { IsBoolean, IsInt, IsPositive, IsString } from 'class-validator'
+import { IsInt, IsPositive, IsString } from 'class-validator'
 
 class CreateTrialDto {
   @IsString()
@@ -6,14 +6,7 @@ class CreateTrialDto {
 
   @IsInt()
   @IsPositive()
-  public users: number
-
-  @IsInt()
-  @IsPositive()
   public duration: number
-
-  @IsBoolean()
-  public status: boolean
 }
 
 export default CreateTrialDto

@@ -24,7 +24,6 @@ export const createPlan = async (req: Request, res: Response) => {
           type: dto.type,
           price: p,
           users: 0,
-          status: dto.status,
           description: description,
           duration: duration[i],
         },
@@ -50,7 +49,7 @@ export const updatePlan = async (req: Request, res: Response) => {
   ]
 
   const plans = await prismaClient.plan.findMany({
-    where: { type, status: true },
+    where: { type, status: true, price: { gt: 0 } },
   })
 
   const newPlans = []
@@ -61,8 +60,8 @@ export const updatePlan = async (req: Request, res: Response) => {
       const newPlan = await prismaClient.plan.update({
         where: { id: plan.id },
         data: {
+          type: dto.type,
           price: prices[i],
-          status: dto.status,
         },
       })
       newPlans.push(newPlan)
@@ -80,7 +79,7 @@ export const deletePlan = async (req: Request, res: Response) => {
 
   try {
     await prismaClient.plan.updateMany({
-      where: { type },
+      where: { type, status: true, price: { gt: 0 } },
       data: { status: false },
     })
   } catch (error: unknown) {
@@ -94,8 +93,12 @@ export const getPlanByType = async (req: Request, res: Response) => {
   const { type } = req.params
 
   const plans = await prismaClient.plan.findMany({
-    where: { type, status: true },
+    where: { type, status: true, price: { gt: 0 } },
   })
+
+  if (plans.length === 0) {
+    return res.status(404).json({ error: 'Plan no encontrado' })
+  }
 
   res.json({ plans })
 }
