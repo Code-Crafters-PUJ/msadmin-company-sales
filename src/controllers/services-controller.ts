@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { CreateServiceDto } from '../dtos'
+import { CreateServiceDto, UpdateServiceDto } from '../dtos'
 import { prismaClient } from '../db/prisma'
 import { plainToClass } from 'class-transformer'
 
@@ -13,9 +13,7 @@ export const createService = async (
     const newService = await prismaClient.service.create({
       data: {
         name: dto.name,
-        status: dto.status,
-        users: dto.users,
-        updatedAt: dto.updatedAt,
+        users: 0,
       },
     })
 
@@ -28,6 +26,76 @@ export const createService = async (
   }
 }
 
+export const updateService = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  const { id } = req.params
+
+  const dto = plainToClass(UpdateServiceDto, req.body)
+
+  try {
+    const updatedService = await prismaClient.service.update({
+      where: { id: parseInt(id), status: true },
+      data: {
+        name: dto.name,
+      },
+    })
+
+    res.json({
+      message: 'Servicio actualizado correctamente',
+      service: updatedService,
+    })
+  } catch (error) {
+    console.error('Error al actualizar servicio:', error)
+    res.status(500).json({ error: 'Error interno del servidor' })
+  }
+}
+
+export const deleteService = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  const { id } = req.params
+
+  try {
+    await prismaClient.service.update({
+      where: { id: parseInt(id) },
+      data: {
+        status: false,
+      },
+    })
+
+    res.json({ message: 'Servicio eliminado correctamente' })
+  } catch (error) {
+    console.error('Error al eliminar servicio:', error)
+    res.status(500).json({ error: 'Error interno del servidor' })
+  }
+}
+
+export const getServiceById = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  const { id } = req.params
+
+  try {
+    const service = await prismaClient.service.findUnique({
+      where: { id: parseInt(id), status: true },
+    })
+
+    if (!service) {
+      res.status(404).json({ error: 'Servicio no encontrado' })
+      return
+    }
+
+    res.json({ service })
+  } catch (error) {
+    console.error('Error al obtener servicio:', error)
+    res.status(500).json({ error: 'Error interno del servidor' })
+  }
+}
+
 export const getAllServices = async (
   req: Request,
   res: Response,
@@ -36,12 +104,6 @@ export const getAllServices = async (
     const services = await prismaClient.service.findMany({
       where: {
         status: true,
-      },
-      select: {
-        name: true,
-        status: true,
-        users: true,
-        updatedAt: true,
       },
     })
 

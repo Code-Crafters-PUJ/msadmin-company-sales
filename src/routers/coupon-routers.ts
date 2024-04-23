@@ -1,11 +1,37 @@
 import express from 'express'
 
-import { createCoupon, getAllCoupons } from '../controllers'
+import {
+  createCoupon,
+  deleteCoupon,
+  getAllCoupons,
+  getCouponByCode,
+  updateCoupon,
+} from '../controllers'
+import {
+  validateDto,
+  validateSalesOrAdminRole,
+  validateSalesRole,
+} from '../middlewares'
+import { CreateCouponDto, UpdateCouponDto } from '../dtos'
 
 const router = express.Router()
 
-router.post('/', createCoupon)
+router.post(
+  '/',
+  [validateSalesRole, validateDto(CreateCouponDto)],
+  createCoupon,
+)
 
-router.get('/all', getAllCoupons)
+router.get('/all', [validateSalesOrAdminRole], getAllCoupons)
+
+router.get('/:code', [validateSalesOrAdminRole], getCouponByCode)
+
+router.put(
+  '/:code',
+  [validateSalesRole, validateDto(UpdateCouponDto)],
+  updateCoupon,
+)
+
+router.delete('/:code', [validateSalesRole], deleteCoupon)
 
 export default router

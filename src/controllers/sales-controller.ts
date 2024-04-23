@@ -18,9 +18,9 @@ export const createBill = async (
     })
 
     if (!client) {
-      res
-        .status(404)
-        .json({ error: 'No se encontró un Negocio con ese ID asociado' })
+      res.status(404).json({
+        error: `No se encontró un Negocio con el ID '${dto.clientId}'`,
+      })
       return
     }
 
@@ -43,7 +43,16 @@ export const createBill = async (
     res.status(201).json({ message: 'Compra Registrada', sale })
   } catch (error: unknown) {
     if (error instanceof PrismaClientKnownRequestError) {
-      res.status(400).json({ error: error.message })
+      const cause = error.meta?.cause.toString()
+      if (cause.includes('Plan')) {
+        res.status(404).json({
+          error: `El tipo plan '${dto.planType}' con la duración '${dto.duration}' no existe`,
+        })
+      } else if (cause.includes('Payment')) {
+        res.status(404).json({
+          error: `El metodo de pago '${dto.paymentMethod}' no existe`,
+        })
+      }
       return
     }
     console.error('Error al registrar venta:', error)
@@ -149,7 +158,7 @@ export const getBillStatsByPeriod = async (req: Request, res: Response) => {
   try {
     const today = await prismaClient.billing.count({
       where: {
-        createdAt: {
+        finalDate: {
           gte: new Date(new Date().setHours(0, 0, 0, 0)),
           lt: new Date(new Date().setHours(23, 59, 59, 999)),
         },
@@ -158,7 +167,7 @@ export const getBillStatsByPeriod = async (req: Request, res: Response) => {
 
     const lastMonth = await prismaClient.billing.count({
       where: {
-        createdAt: {
+        finalDate: {
           gte: new Date(new Date().setMonth(new Date().getMonth() - 1)),
         },
       },
@@ -166,7 +175,7 @@ export const getBillStatsByPeriod = async (req: Request, res: Response) => {
 
     const lastYear = await prismaClient.billing.count({
       where: {
-        createdAt: {
+        finalDate: {
           gte: new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
         },
       },

@@ -1,26 +1,28 @@
-import { IsInt, IsPositive, IsString, NotEquals } from 'class-validator'
+import { IsInt, IsOptional, IsPositive, IsString } from 'class-validator'
 
-class CreatePlanDto {
+class UpdatePlanDto {
+  @IsOptional()
   @IsString()
   public type: string
 
+  @IsOptional()
   @IsInt()
   @IsPositive()
-  @NotEquals(0)
   public mensualPrice: number
 
+  @IsOptional()
   @IsInt()
   @IsPositive()
-  @NotEquals(0)
   public semestralPrice: number
 
+  @IsOptional()
   @IsInt()
   @IsPositive()
-  @NotEquals(0)
   public anualPrice: number
 
+  @IsOptional()
   @IsString({ each: true })
   public services: string[]
 }
 
-export default CreatePlanDto
+export default UpdatePlanDto

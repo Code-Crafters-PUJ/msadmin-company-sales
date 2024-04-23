@@ -1,11 +1,20 @@
 import express from 'express'
 
 import { createService, getAllServices } from '../controllers'
-import { validateSalesOrAdminRole, validateSalesRole } from '../middlewares'
+import {
+  validateDto,
+  validateSalesOrAdminRole,
+  validateSalesRole,
+} from '../middlewares'
+import { CreateServiceDto } from '../dtos'
 
 const router = express.Router()
 
-router.post('/', [validateSalesRole], createService)
+router.post(
+  '/',
+  [validateSalesRole, validateDto(CreateServiceDto)],
+  createService,
+)
 
 router.get('/all', [validateSalesOrAdminRole], getAllServices)
 

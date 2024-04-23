@@ -1,6 +1,6 @@
 import { Transform } from 'class-transformer'
 import { IsDateString, IsInt, IsPositive, IsString } from 'class-validator'
-import { transformToDate } from 'src/helpers/transform'
+import { transformToDate } from '../helpers/transform'
 
 class CreateBillDto {
   @IsInt()
