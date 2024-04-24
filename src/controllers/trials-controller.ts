@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import { plainToClass } from 'class-transformer'
+
 import { CreateTrialDto, UpdateTrialDto } from '../dtos'
 import { prismaClient } from '../db/prisma'
 

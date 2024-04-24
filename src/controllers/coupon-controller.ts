@@ -1,9 +1,9 @@
 import { Request, Response } from 'express'
+import { plainToClass } from 'class-transformer'
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 
 import { CreateCouponDto, UpdateCouponDto } from '../dtos'
 import { prismaClient } from '../db/prisma'
-import { plainToClass } from 'class-transformer'
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 
 export const createCoupon = async (req: Request, res: Response) => {
   const dto = plainToClass(CreateCouponDto, req.body)

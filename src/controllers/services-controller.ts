@@ -1,7 +1,8 @@
 import { Request, Response } from 'express'
+import { plainToClass } from 'class-transformer'
+
 import { CreateServiceDto, UpdateServiceDto } from '../dtos'
 import { prismaClient } from '../db/prisma'
-import { plainToClass } from 'class-transformer'
 
 export const createService = async (
   req: Request,

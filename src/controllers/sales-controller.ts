@@ -1,10 +1,10 @@
 import { Request, Response } from 'express'
+import { plainToClass } from 'class-transformer'
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 
 import { CreateBillDto, SendBillingEmailDto } from '../dtos'
 import { sendEmail } from '../helpers/emails'
 import { prismaClient } from '../db/prisma'
-import { plainToClass } from 'class-transformer'
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 
 export const createBill = async (
   req: Request,
