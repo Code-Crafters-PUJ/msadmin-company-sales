@@ -6,7 +6,7 @@ import {
   IsPositive,
   IsString,
 } from 'class-validator'
-import { transformToDate } from 'src/helpers/transform'
+import { transformToDate } from '../helpers/transform'
 
 class UpdateCouponDto {
   @IsString()
