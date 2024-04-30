@@ -8,7 +8,7 @@ export const hasSalesRole = (token: string): boolean => {
       role: string
     }
 
-    return decoded['role'] === 'VENTAS'
+    return decoded['role'] === 'Ventas'
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.error('Error al verificar el token:', error.message)
@@ -24,7 +24,7 @@ export const hasAdminRole = (token: string): boolean => {
       role: string
     }
 
-    return decoded['role'] === 'ADMIN'
+    return decoded['role'] === 'Admin'
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.error('Error al verificar el token:', error.message)
