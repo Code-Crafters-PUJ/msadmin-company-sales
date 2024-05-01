@@ -41,7 +41,7 @@ VALUES ('2024-03-29', '2025-03-28', 2, 2, 2, 200.00, '2024-03-29');  -- Gold pla
 INSERT INTO "Service" (name, users, status)
 VALUES ('Nómina', 100,  true);
 
-INSERT INTO "Service" (name, "updatedAt", users, status)
+INSERT INTO "Service" (name, users, status)
 VALUES ('Ventas', 1000,  true);
 
 -- Insert coupons
