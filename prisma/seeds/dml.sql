@@ -8,9 +8,17 @@ VALUES ('Marketing Solutions', 'Jane Smith', 'jane.smith@marketingsolutions.com'
 -- Insert plans
 INSERT INTO "Plan" (type, price, description, duration, users)
 VALUES ('Silver', 100.00, 'Limited features, ideal for small businesses', 12, 100);
+INSERT INTO "Plan" (type, price, description, duration, users)
+VALUES ('Silver', 60.00, 'Limited features, ideal for small businesses', 6, 80);
+INSERT INTO "Plan" (type, price, description, duration, users)
+VALUES ('Silver', 20.00, 'Limited features, ideal for small businesses', 1, 150);
 
 INSERT INTO "Plan" (type, price, description, duration, users)
-VALUES ('Gold', 200.00, 'Full features, suitable for growing businesses', 6, 1000);
+VALUES ('Gold', 200.00, 'Full features, suitable for growing businesses', 12, 1000);
+INSERT INTO "Plan" (type, price, description, duration, users)
+VALUES ('Gold', 120.00, 'Full features, suitable for growing businesses', 6, 400);
+INSERT INTO "Plan" (type, price, description, duration, users)
+VALUES ('Gold', 40.00, 'Full features, suitable for growing businesses', 1, 700);
 
 INSERT INTO "Plan" (type, price, description, duration, users)
 VALUES ('Silver Trial', 0.00, 'Limited features, ideal for small businesses trial', 1, 15);
