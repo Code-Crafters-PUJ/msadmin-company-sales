@@ -7,12 +7,12 @@ export const validateSalesRole = async (
   res: Response,
   next: NextFunction,
 ) => {
-  // const { authorization } = req.headers
+  const { authorization } = req.headers
 
-  // if (!authorization) {
-  //   res.status(401).json({ error: 'No autorizado' })
-  //   return
-  // }
+  if (!authorization) {
+    res.status(401).json({ error: 'No autorizado' })
+    return
+  }
 
   // if (!hasSalesRole(authorization as string)) {
   //   res
@@ -29,12 +29,12 @@ export const validateSalesOrAdminRole = async (
   res: Response,
   next: NextFunction,
 ) => {
-  // const { authorization } = req.headers
+  const { authorization } = req.headers
 
-  // if (!authorization) {
-  //   res.status(401).json({ error: 'No autorizado' })
-  //   return
-  // }
+  if (!authorization) {
+    res.status(401).json({ error: 'No autorizado' })
+    return
+  }
 
   // if (
   //   !(
