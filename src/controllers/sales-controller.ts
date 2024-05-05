@@ -187,15 +187,3 @@ export const getBillStatsByPeriod = async (req: Request, res: Response) => {
     res.status(500).json({ error: 'Error interno del servidor' })
   }
 }
-
-export const getAllClients = async (req: Request, res: Response) => {
-  try {
-    const clients = await prismaClient.client.findMany({
-      include: { billings: true },
-    })
-    res.json({ clients })
-  } catch (error: unknown) {
-    console.error('Error al obtener todos los negocios:', error)
-    res.status(500).json({ error: 'Error interno del servidor' })
-  }
-}

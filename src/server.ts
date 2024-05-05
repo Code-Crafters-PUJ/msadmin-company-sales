@@ -7,6 +7,7 @@ import {
   servicesRouter,
   couponRouter,
   trialsRouter,
+  clientsRouter,
 } from './routers'
 import { prismaClient } from './db/prisma'
 import cors from 'cors'
@@ -37,6 +38,7 @@ class Server {
     this.app.use('/services', servicesRouter)
     this.app.use('/coupons', couponRouter)
     this.app.use('/trials', trialsRouter)
+    this.app.use('/clients', clientsRouter)
   }
 
   public start(): void {
