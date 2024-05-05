@@ -17,7 +17,7 @@ export const getAllClients = async (req: Request, res: Response) => {
 
 export const getClientById = async (req: Request, res: Response) => {
   const { id } = req.params
-  if (!isNumber(id))
+  if (!isNumber(parseInt(id)))
     return res.status(400).json({ error: 'El id debe ser un número' })
   try {
     const client = await prismaClient.client.findUnique({
