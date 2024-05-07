@@ -48,7 +48,7 @@ export const updatePlan = async (req: Request, res: Response) => {
   ]
 
   const plans = await prismaClient.plan.findMany({
-    where: { type, status: true, price: { gt: 0 } },
+    where: { type, price: { gt: 0 } },
   })
 
   const newPlans = []
@@ -92,7 +92,7 @@ export const getPlanByType = async (req: Request, res: Response) => {
   const { type } = req.params
 
   const plans = await prismaClient.plan.findMany({
-    where: { type, status: true, price: { gt: 0 } },
+    where: { type, price: { gt: 0 } },
   })
 
   if (plans.length === 0) {
@@ -106,7 +106,6 @@ export const getAllplans = async (req: Request, res: Response) => {
   res.json({
     plans: await prismaClient.plan.findMany({
       where: {
-        status: true,
         price: {
           gt: 0,
         },

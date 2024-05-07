@@ -37,7 +37,7 @@ export const updateService = async (
 
   try {
     const updatedService = await prismaClient.service.update({
-      where: { id: parseInt(id), status: true },
+      where: { id: parseInt(id) },
       data: {
         name: dto.name,
       },
@@ -82,7 +82,7 @@ export const getServiceById = async (
 
   try {
     const service = await prismaClient.service.findUnique({
-      where: { id: parseInt(id), status: true },
+      where: { id: parseInt(id) },
     })
 
     if (!service) {
@@ -102,11 +102,7 @@ export const getAllServices = async (
   res: Response,
 ): Promise<void> => {
   try {
-    const services = await prismaClient.service.findMany({
-      where: {
-        status: true,
-      },
-    })
+    const services = await prismaClient.service.findMany()
 
     res.status(200).json({ services })
   } catch (error) {

@@ -62,7 +62,7 @@ export const deleteTrial = async (req: Request, res: Response) => {
 
   try {
     const trial = await prismaClient.plan.findFirst({
-      where: { type, status: true, price: 0 },
+      where: { type, price: 0 },
     })
 
     await prismaClient.plan.update({
@@ -84,7 +84,7 @@ export const getTrialByType = async (req: Request, res: Response) => {
 
   try {
     const trial = await prismaClient.plan.findFirst({
-      where: { type, status: true, price: 0 },
+      where: { type, price: 0 },
     })
 
     if (!trial) {
@@ -103,7 +103,6 @@ export const getAllTrials = async (req: Request, res: Response) => {
   try {
     const plansWithClients = await prismaClient.plan.findMany({
       where: {
-        status: true,
         price: 0,
       },
       include: {
