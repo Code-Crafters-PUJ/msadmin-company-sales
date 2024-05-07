@@ -2,12 +2,40 @@ import { Request, Response } from 'express'
 import { isNumber } from 'class-validator'
 
 import { prismaClient } from '../db/prisma'
+import { Plan } from '@prisma/client'
+
+const getActualPlan = async (clientId: number): Promise<Plan | null> => {
+  const client = await prismaClient.client.findUnique({
+    where: { id: clientId },
+    include: { billings: true },
+  })
+  if (!client || client.billings.length == 0) return null
+
+  const mostRecentBilling = client.billings.sort((a, b) => {
+    if (a.finalDate > b.finalDate) {
+      return -1
+    } else {
+      return 1
+    }
+  })[0]
+  const plan = await prismaClient.plan.findUnique({
+    where: { id: mostRecentBilling.planId },
+  })
+
+  return mostRecentBilling.finalDate > new Date() ? plan : null
+}
 
 export const getAllClients = async (req: Request, res: Response) => {
   try {
-    const clients = await prismaClient.client.findMany({
+    const dbClients = await prismaClient.client.findMany({
       include: { billings: true },
     })
+    const clients = await Promise.all(
+      dbClients.map(async (client) => {
+        const plan = await getActualPlan(client.id)
+        return { plan, ...client }
+      }),
+    )
     res.json({ clients })
   } catch (error: unknown) {
     console.error('Error al obtener todos los negocios:', error)
@@ -24,7 +52,13 @@ export const getClientById = async (req: Request, res: Response) => {
       where: { id: parseInt(id) },
       include: { billings: true },
     })
-    res.json({ client })
+    const plan = await getActualPlan(client.id)
+    res.json({
+      client: {
+        ...client,
+        plan,
+      },
+    })
   } catch (error: unknown) {
     console.error('Error al obtener todos los negocios:', error)
     res.status(500).json({ error: 'Error interno del servidor' })
