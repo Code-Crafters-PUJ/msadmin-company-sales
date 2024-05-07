@@ -99,7 +99,7 @@ export const getAllBillsByClient = async (
       return
     }
 
-    res.json(sales)
+    res.json({ sales })
   } catch (error: unknown) {
     console.error('Error al obtener ventas por negocio:', error)
     res.status(500).json({ error: 'Error interno del servidor' })
