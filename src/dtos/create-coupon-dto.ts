@@ -1,10 +1,10 @@
 import { Transform } from 'class-transformer'
-import { IsDateString, IsInt, IsPositive } from 'class-validator'
+import { IsDateString, IsInt, IsPositive, IsString } from 'class-validator'
 import { transformToDate } from '../helpers/transform'
 
 class CreateCouponDto {
-  @IsInt()
-  public clientId: number
+  @IsString()
+  public companyName: string
 
   @IsInt()
   @IsPositive()

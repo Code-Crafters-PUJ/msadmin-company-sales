@@ -13,7 +13,7 @@ export const createCoupon = async (req: Request, res: Response) => {
     const newCoupon = await prismaClient.coupon.create({
       data: {
         code: uuidV4(),
-        client: { connect: { id: dto.clientId } },
+        client: { connect: { companyName: dto.companyName } },
         discount: dto.discount,
         duration: dto.duration,
         expirationDate: dto.expirationDate,
@@ -28,7 +28,7 @@ export const createCoupon = async (req: Request, res: Response) => {
       const cause = error.meta?.cause.toString()
       if (cause.includes('Client')) {
         res.status(404).json({
-          error: `No se encontró un Negocio con el ID '${dto.clientId}'`,
+          error: `No se encontró un Negocio con el nombre '${dto.companyName}'`,
         })
       }
     }
@@ -45,7 +45,7 @@ export const updateCoupon = async (req: Request, res: Response) => {
     const updatedCoupon = await prismaClient.coupon.update({
       where: { code },
       data: {
-        client: { connect: { id: dto.clientId } },
+        client: { connect: { companyName: dto.companyName } },
         discount: dto.discount,
         duration: dto.duration,
         expirationDate: dto.expirationDate,
@@ -61,7 +61,7 @@ export const updateCoupon = async (req: Request, res: Response) => {
       const cause = error.meta?.cause.toString()
       if (cause.includes('Client')) {
         res.status(404).json({
-          error: `No se encontró un Negocio con el ID '${dto.clientId}'`,
+          error: `No se encontró un Negocio con el nombre '${dto.companyName}'`,
         })
       }
     }

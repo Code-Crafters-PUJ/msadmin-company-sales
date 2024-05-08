@@ -1,11 +1,17 @@
 import { Transform } from 'class-transformer'
-import { IsDateString, IsInt, IsOptional, IsPositive } from 'class-validator'
+import {
+  IsDateString,
+  IsInt,
+  IsOptional,
+  IsPositive,
+  IsString,
+} from 'class-validator'
 import { transformToDate } from '../helpers/transform'
 
 class UpdateCouponDto {
-  @IsInt()
+  @IsString()
   @IsOptional()
-  public clientId: number
+  public companyName: string
 
   @IsInt()
   @IsPositive()
