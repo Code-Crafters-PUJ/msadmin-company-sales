@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { plainToClass } from 'class-transformer'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
+import { v4 as uuidV4 } from 'uuid'
 
 import { CreateCouponDto, UpdateCouponDto } from '../dtos'
 import { prismaClient } from '../db/prisma'
@@ -11,7 +12,7 @@ export const createCoupon = async (req: Request, res: Response) => {
   try {
     const newCoupon = await prismaClient.coupon.create({
       data: {
-        code: dto.code,
+        code: uuidV4(),
         client: { connect: { id: dto.clientId } },
         discount: dto.discount,
         duration: dto.duration,

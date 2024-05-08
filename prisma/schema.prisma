@@ -82,6 +82,8 @@ model Plan {
   price       Float
   duration    Int
   users       Int
+  numAccounts Int     @default(-1)
+  numServices Int     @default(-1)
   status      Boolean @default(true)
 
   billings Billing[]
@@ -95,7 +97,7 @@ model Plan {
 
 model Service {
   id     Int     @id @default(autoincrement())
-  name   String
+  name   String  @unique
   status Boolean @default(true)
   users  Int
 

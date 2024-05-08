@@ -1,6 +1,6 @@
 import express from 'express'
 
-import { createService, getAllServices } from '../controllers'
+import { createService, deleteService, getAllServices } from '../controllers'
 import {
   validateDto,
   validateSalesOrAdminRole,
@@ -17,5 +17,7 @@ router.post(
 )
 
 router.get('/all', [validateSalesOrAdminRole], getAllServices)
+
+router.delete('/:name', [validateSalesOrAdminRole], deleteService)
 
 export default router

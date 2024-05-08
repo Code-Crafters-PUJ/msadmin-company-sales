@@ -14,6 +14,7 @@ export const createService = async (
     const newService = await prismaClient.service.create({
       data: {
         name: dto.name,
+        status: dto.state,
         users: 0,
       },
     })
@@ -57,11 +58,11 @@ export const deleteService = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
-  const { id } = req.params
+  const { name } = req.params
 
   try {
     await prismaClient.service.update({
-      where: { id: parseInt(id) },
+      where: { name: name },
       data: {
         status: false,
       },
@@ -78,11 +79,11 @@ export const getServiceById = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
-  const { id } = req.params
+  const { name } = req.params
 
   try {
     const service = await prismaClient.service.findUnique({
-      where: { id: parseInt(id) },
+      where: { name: name },
     })
 
     if (!service) {

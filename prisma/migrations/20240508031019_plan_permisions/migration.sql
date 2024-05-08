@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Plan" ADD COLUMN     "numAccounts" INTEGER NOT NULL DEFAULT -1,
+ADD COLUMN     "numServices" INTEGER NOT NULL DEFAULT -1;
