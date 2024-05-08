@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Service" ADD COLUMN     "active" BOOLEAN NOT NULL DEFAULT true,
+ALTER COLUMN "status" DROP DEFAULT;

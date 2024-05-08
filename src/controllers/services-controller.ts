@@ -11,6 +11,24 @@ export const createService = async (
   const dto = plainToClass(CreateServiceDto, req.body)
 
   try {
+    const service = await prismaClient.service.findUnique({
+      where: { name: dto.name, active: false },
+    })
+
+    if (service) {
+      await prismaClient.service.update({
+        where: { name: dto.name },
+        data: {
+          active: true,
+        },
+      })
+
+      res
+        .status(201)
+        .json({ message: 'Servicio creado correctamente', service })
+      return
+    }
+
     const newService = await prismaClient.service.create({
       data: {
         name: dto.name,
@@ -32,15 +50,15 @@ export const updateService = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
-  const { id } = req.params
+  const { name } = req.params
 
   const dto = plainToClass(UpdateServiceDto, req.body)
 
   try {
     const updatedService = await prismaClient.service.update({
-      where: { id: parseInt(id) },
+      where: { name, active: true },
       data: {
-        name: dto.name,
+        status: dto.state,
       },
     })
 
@@ -64,7 +82,7 @@ export const deleteService = async (
     await prismaClient.service.update({
       where: { name: name },
       data: {
-        status: false,
+        active: false,
       },
     })
 
@@ -83,7 +101,7 @@ export const getServiceById = async (
 
   try {
     const service = await prismaClient.service.findUnique({
-      where: { name: name },
+      where: { name, active: true },
     })
 
     if (!service) {
@@ -103,7 +121,9 @@ export const getAllServices = async (
   res: Response,
 ): Promise<void> => {
   try {
-    const services = await prismaClient.service.findMany()
+    const services = await prismaClient.service.findMany({
+      where: { active: true },
+    })
 
     res.status(200).json({ services })
   } catch (error) {
