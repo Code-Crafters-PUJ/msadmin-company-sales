@@ -13,14 +13,14 @@ router.post('/', [validateSalesRole, validateDto(CreateTrialDto)], createTrial)
 
 router.get('/all', [validateSalesOrAdminRole], getAllTrials)
 
-router.get('/:type', [validateSalesOrAdminRole], getTrialByType)
+router.get('/:id', [validateSalesOrAdminRole], getTrialByType)
 
 router.put(
-  '/:type',
+  '/:id',
   [validateSalesRole, validateDto(UpdateTrialDto)],
   createTrial,
 )
 
-router.delete('/:type', [validateSalesRole], createTrial)
+router.delete('/:id', [validateSalesRole], createTrial)
 
 export default router

@@ -10,6 +10,27 @@ export const createPlan = async (req: Request, res: Response) => {
   const description = ''
 
   try {
+    const deletedPlan = await prismaClient.plan.findFirst({
+      where: { type: dto.type, active: false },
+    })
+
+    if (deletedPlan) {
+      await prismaClient.plan.update({
+        where: { type: dto.type },
+        data: {
+          mensualPrice: dto.mensualPrice,
+          semestralPrice: dto.semestralPrice,
+          anualPrice: dto.anualPrice,
+          users: 0,
+          description,
+          state: dto.state,
+          active: true,
+        },
+      })
+      res.status(201).json({ message: 'Plan creado' })
+      return
+    }
+
     await prismaClient.plan.create({
       data: {
         type: dto.type,
@@ -21,11 +42,11 @@ export const createPlan = async (req: Request, res: Response) => {
         state: dto.state,
       },
     })
+    res.status(201).json({ message: 'Plan creado' })
   } catch (error: unknown) {
     console.error('Error al registrar plan:', error)
     res.status(500).json({ error: 'Error interno del servidor' })
   }
-  res.json({ message: 'Plan creado' })
 }
 
 export const updatePlan = async (req: Request, res: Response) => {

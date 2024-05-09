@@ -27,6 +27,7 @@ model Client {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+  Trials    Trials[]
 
   @@index(email)
   @@index(nit)
@@ -93,6 +94,7 @@ model Plan {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+  Trials    Trials[]
 }
 
 model Service {
@@ -119,4 +121,19 @@ model PlanHasService {
   updatedAt DateTime @default(now()) @updatedAt
 
   @@id([planId, serviceId])
+}
+
+model Trials {
+  id       Int     @id @default(autoincrement())
+  duration Int
+  state    String
+  active   Boolean @default(true)
+  planType String
+  clientId Int     @unique
+
+  client Client @relation(fields: [clientId], references: [id])
+  plan   Plan   @relation(fields: [planType], references: [type])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
