@@ -31,7 +31,7 @@ export const createBill = async (
         finalDate: dto.finalDate,
         plan: {
           connect: {
-            type_duration: { type: dto.planType, duration: dto.duration },
+            type: dto.planType,
           },
         },
         payment: { connect: { method: dto.paymentMethod } },
@@ -66,7 +66,7 @@ export const getAllBills = async (
 ): Promise<void> => {
   try {
     const sales = await prismaClient.billing.findMany({
-      where: { status: true },
+      where: { active: true },
       include: { client: true, plan: true, payment: true },
     })
     res.json({ sales })
@@ -88,7 +88,7 @@ export const getAllBillsByClient = async (
 
   try {
     const sales = await prismaClient.billing.findMany({
-      where: { clientId: parseInt(clientId), status: true },
+      where: { clientId: parseInt(clientId), active: true },
       include: { client: true, plan: true, payment: true },
     })
 

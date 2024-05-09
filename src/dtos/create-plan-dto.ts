@@ -1,4 +1,4 @@
-import { IsInt, IsPositive, IsString, NotEquals } from 'class-validator'
+import { IsIn, IsInt, IsPositive, IsString, NotEquals } from 'class-validator'
 
 class CreatePlanDto {
   @IsString()
@@ -19,8 +19,9 @@ class CreatePlanDto {
   @NotEquals(0)
   public anualPrice: number
 
-  @IsString({ each: true })
-  public services: string[]
+  @IsString()
+  @IsIn(['Borrador', 'Mantenimiento', 'Publicado', 'Desabilitado'])
+  public state: string
 }
 
 export default CreatePlanDto

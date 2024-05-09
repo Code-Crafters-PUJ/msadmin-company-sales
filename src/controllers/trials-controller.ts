@@ -11,19 +11,38 @@ export const createTrial = async (
   const dto = plainToClass(CreateTrialDto, req.body)
 
   try {
-    const newTrial = await prismaClient.plan.create({
+    const deletedTrial = await prismaClient.trials.findFirst({
+      where: { client: { companyName: dto.companyName }, active: false },
+    })
+
+    if (deletedTrial) {
+      const client = await prismaClient.client.findUnique({
+        where: { companyName: dto.companyName },
+      })
+      await prismaClient.trials.update({
+        where: { clientId: client.id },
+        data: {
+          duration: dto.duration,
+          state: dto.state,
+          active: true,
+          plan: { connect: { type: dto.plan } },
+        },
+      })
+
+      res.status(201).json({ message: 'Trial creado correctamente' })
+      return
+    }
+
+    const trial = await prismaClient.trials.create({
       data: {
-        type: dto.type,
-        price: 0,
-        users: 0,
+        plan: { connect: { type: dto.plan } },
+        client: { connect: { companyName: dto.companyName } },
         duration: dto.duration,
-        description: '',
+        state: dto.state,
       },
     })
 
-    res
-      .status(201)
-      .json({ message: 'Trial creado correctamente', trial: newTrial })
+    res.status(201).json({ message: 'Trial creado correctamente', trial })
   } catch (error) {
     console.error('Error al registrar plan:', error)
     res.status(500).json({ error: 'Error interno del servidor' })
@@ -31,19 +50,18 @@ export const createTrial = async (
 }
 
 export const updateTrial = async (req: Request, res: Response) => {
-  const { type } = req.params
+  const { id } = req.params
 
   const dto = plainToClass(UpdateTrialDto, req.body)
 
   try {
-    const trial = await prismaClient.plan.findFirst({
-      where: { type, status: true, price: 0 },
-    })
-    const updatedTrial = await prismaClient.plan.update({
-      where: { id: trial.id },
+    const updatedTrial = await prismaClient.trials.update({
+      where: { id: parseInt(id) },
       data: {
-        type: dto.type,
+        plan: { connect: { type: dto.plan } },
+        client: { connect: { companyName: dto.companyName } },
         duration: dto.duration,
+        state: dto.state,
       },
     })
 
@@ -58,18 +76,12 @@ export const updateTrial = async (req: Request, res: Response) => {
 }
 
 export const deleteTrial = async (req: Request, res: Response) => {
-  const { type } = req.params
+  const { id } = req.params
 
   try {
-    const trial = await prismaClient.plan.findFirst({
-      where: { type, price: 0 },
-    })
-
-    await prismaClient.plan.update({
-      where: { id: trial.id },
-      data: {
-        status: false,
-      },
+    await prismaClient.trials.update({
+      where: { id: parseInt(id) },
+      data: { active: false },
     })
 
     res.json({ message: 'Trial eliminado correctamente' })
@@ -80,19 +92,19 @@ export const deleteTrial = async (req: Request, res: Response) => {
 }
 
 export const getTrialByType = async (req: Request, res: Response) => {
-  const { type } = req.params
+  const { id } = req.params
 
   try {
-    const trial = await prismaClient.plan.findFirst({
-      where: { type, price: 0 },
+    const trials = await prismaClient.trials.findUnique({
+      where: { id: parseInt(id) },
     })
 
-    if (!trial) {
+    if (!trials) {
       res.status(404).json({ error: 'Trial no encontrado' })
       return
     }
 
-    res.json({ trial })
+    res.json({ trials })
   } catch (error) {
     console.error('Error al obtener plan:', error)
     res.status(500).json({ error: 'Error interno del servidor' })
@@ -101,34 +113,11 @@ export const getTrialByType = async (req: Request, res: Response) => {
 
 export const getAllTrials = async (req: Request, res: Response) => {
   try {
-    const plansWithClients = await prismaClient.plan.findMany({
-      where: {
-        price: 0,
-      },
-      include: {
-        billings: {
-          include: {
-            client: true,
-          },
-        },
-      },
+    const trials = await prismaClient.trials.findMany({
+      where: { active: true },
     })
 
-    const formattedPlans = plansWithClients.map((plan) => {
-      const { type, duration, billings } = plan
-
-      const clients = billings.map((billing) => billing.client)
-
-      const companyNames = clients.map((client) => client.companyName)
-
-      return {
-        clients: companyNames,
-        type,
-        duration,
-      }
-    })
-
-    res.json({ trials: formattedPlans })
+    res.json({ trials })
   } catch (error) {
     console.error('Error al obtener planes:', error)
     res.status(500).json({ error: 'Error interno del servidor' })

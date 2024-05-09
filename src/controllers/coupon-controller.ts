@@ -76,7 +76,7 @@ export const deleteCoupon = async (req: Request, res: Response) => {
   try {
     await prismaClient.coupon.update({
       where: { code },
-      data: { status: false },
+      data: { active: false },
     })
 
     res.status(200).json({ message: 'Cupon eliminado correctamente' })
@@ -91,7 +91,7 @@ export const getCouponByCode = async (req: Request, res: Response) => {
 
   try {
     const coupon = await prismaClient.coupon.findUnique({
-      where: { code, status: true },
+      where: { code, active: true },
       include: { client: true },
     })
 
@@ -110,7 +110,7 @@ export const getAllCoupons = async (req: Request, res: Response) => {
   try {
     const coupons = await prismaClient.coupon.findMany({
       where: {
-        status: true,
+        active: true,
       },
       include: {
         client: true,
