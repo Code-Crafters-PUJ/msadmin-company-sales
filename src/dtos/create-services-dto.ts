@@ -1,11 +1,12 @@
-import { IsBoolean, IsString } from 'class-validator'
+import { IsBoolean, IsIn, IsString } from 'class-validator'
 
 class CreateServiceDto {
   @IsString()
   public name: string
 
   @IsBoolean()
-  public state: boolean
+  @IsIn(['Borrador', 'Mantenimiento', 'Publicado', 'Desabilitado'])
+  public state: string
 }
 
 export default CreateServiceDto

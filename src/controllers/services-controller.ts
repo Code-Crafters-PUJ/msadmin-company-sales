@@ -32,7 +32,7 @@ export const createService = async (
     const newService = await prismaClient.service.create({
       data: {
         name: dto.name,
-        status: dto.state,
+        state: dto.state,
         users: 0,
       },
     })
@@ -58,7 +58,7 @@ export const updateService = async (
     const updatedService = await prismaClient.service.update({
       where: { name, active: true },
       data: {
-        status: dto.state,
+        state: dto.state,
       },
     })
 

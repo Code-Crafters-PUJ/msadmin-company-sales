@@ -1,4 +1,4 @@
-import { IsInt, IsOptional, IsPositive, IsString } from 'class-validator'
+import { IsIn, IsInt, IsOptional, IsPositive, IsString } from 'class-validator'
 
 class UpdatePlanDto {
   @IsOptional()
@@ -21,8 +21,19 @@ class UpdatePlanDto {
   public anualPrice: number
 
   @IsOptional()
-  @IsString({ each: true })
-  public services: string[]
+  @IsInt()
+  @IsPositive()
+  public numAccounts: number
+
+  @IsOptional()
+  @IsInt()
+  @IsPositive()
+  public numServices: number
+
+  @IsOptional()
+  @IsString()
+  @IsIn(['Borrador', 'Mantenimiento', 'Publicado', 'Desabilitado'])
+  public state: string
 }
 
 export default UpdatePlanDto

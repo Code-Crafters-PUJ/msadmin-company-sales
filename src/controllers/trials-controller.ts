@@ -8,7 +8,7 @@ export const createTrial = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
-  const dto = plainToClass(CreateTrialDto, req.body)
+  /*const dto = plainToClass(CreateTrialDto, req.body)
 
   try {
     const newTrial = await prismaClient.plan.create({
@@ -27,11 +27,11 @@ export const createTrial = async (
   } catch (error) {
     console.error('Error al registrar plan:', error)
     res.status(500).json({ error: 'Error interno del servidor' })
-  }
+  }*/
 }
 
 export const updateTrial = async (req: Request, res: Response) => {
-  const { type } = req.params
+  /*const { type } = req.params
 
   const dto = plainToClass(UpdateTrialDto, req.body)
 
@@ -54,11 +54,11 @@ export const updateTrial = async (req: Request, res: Response) => {
   } catch (error) {
     console.error('Error al actualizar plan:', error)
     res.status(500).json({ error: 'Error interno del servidor' })
-  }
+  }*/
 }
 
 export const deleteTrial = async (req: Request, res: Response) => {
-  const { type } = req.params
+  /*const { type } = req.params
 
   try {
     const trial = await prismaClient.plan.findFirst({
@@ -76,11 +76,11 @@ export const deleteTrial = async (req: Request, res: Response) => {
   } catch (error) {
     console.error('Error al eliminar plan:', error)
     res.status(500).json({ error: 'Error interno del servidor' })
-  }
+  }*/
 }
 
 export const getTrialByType = async (req: Request, res: Response) => {
-  const { type } = req.params
+  /*const { type } = req.params
 
   try {
     const trial = await prismaClient.plan.findFirst({
@@ -96,11 +96,11 @@ export const getTrialByType = async (req: Request, res: Response) => {
   } catch (error) {
     console.error('Error al obtener plan:', error)
     res.status(500).json({ error: 'Error interno del servidor' })
-  }
+  }*/
 }
 
 export const getAllTrials = async (req: Request, res: Response) => {
-  try {
+  /*try {
     const plansWithClients = await prismaClient.plan.findMany({
       where: {
         price: 0,
@@ -134,5 +134,5 @@ export const getAllTrials = async (req: Request, res: Response) => {
     res.status(500).json({ error: 'Error interno del servidor' })
   } finally {
     await prismaClient.$disconnect()
-  }
+  }*/
 }

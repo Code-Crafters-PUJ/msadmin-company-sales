@@ -20,7 +20,7 @@ model Client {
   email       String  @unique
   telephone   String  @unique
   nit         Int     @unique
-  status      Boolean @default(true)
+  active      Boolean @default(true)
 
   billings Billing[]
   coupons  Coupon[]
@@ -37,7 +37,7 @@ model Coupon {
   duration       Int
   discount       Int
   expirationDate DateTime
-  status         Boolean  @default(true)
+  active         Boolean  @default(true)
   clientId       Int
 
   client Client @relation(fields: [clientId], references: [id])
@@ -52,7 +52,7 @@ model Billing {
   finalDate   DateTime
   paymentDate DateTime
   amount      Float
-  status      Boolean  @default(true)
+  active      Boolean  @default(true)
   clientId    Int
   planId      Int
   paymentId   Int
@@ -76,29 +76,29 @@ model Payment {
 }
 
 model Plan {
-  id          Int     @id @default(autoincrement())
-  type        String
-  description String
-  price       Float
-  duration    Int
-  users       Int
-  numAccounts Int     @default(-1)
-  numServices Int     @default(-1)
-  status      Boolean @default(true)
+  id             Int     @id @default(autoincrement())
+  type           String  @unique
+  description    String
+  mensualPrice   Float
+  semestralPrice Float
+  anualPrice     Float
+  users          Int
+  state          String
+  numAccounts    Int     @default(-1)
+  numServices    Int     @default(-1)
+  active         Boolean @default(true)
 
   billings Billing[]
   services PlanHasService[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
-
-  @@unique([type, duration], name: "type_duration")
 }
 
 model Service {
   id     Int     @id @default(autoincrement())
   name   String  @unique
-  status Boolean
+  state  String
   active Boolean @default(true)
   users  Int
 
