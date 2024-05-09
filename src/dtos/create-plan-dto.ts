@@ -1,4 +1,11 @@
-import { IsIn, IsInt, IsPositive, IsString, NotEquals } from 'class-validator'
+import {
+  IsIn,
+  IsInt,
+  IsPositive,
+  IsString,
+  Min,
+  NotEquals,
+} from 'class-validator'
 
 class CreatePlanDto {
   @IsString()
@@ -22,6 +29,14 @@ class CreatePlanDto {
   @IsString()
   @IsIn(['Borrador', 'Mantenimiento', 'Publicado', 'Deshabilitado'])
   public state: string
+
+  @IsInt()
+  @Min(-1)
+  public numAccounts: number
+
+  @IsInt()
+  @Min(-1)
+  public numServices: number
 }
 
 export default CreatePlanDto
