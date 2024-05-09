@@ -7,7 +7,7 @@ class UpdateServiceDto {
 
   @IsString()
   @IsOptional()
-  @IsIn(['Borrador', 'Mantenimiento', 'Publicado', 'Desabilitado'])
+  @IsIn(['Borrador', 'Mantenimiento', 'Publicado', 'Deshabilitado'])
   public state: string
 }
 
