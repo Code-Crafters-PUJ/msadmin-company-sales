@@ -115,6 +115,7 @@ export const getAllTrials = async (req: Request, res: Response) => {
   try {
     const trials = await prismaClient.trials.findMany({
       where: { active: true },
+      include: { plan: true, client: true },
     })
 
     res.json({ trials })
