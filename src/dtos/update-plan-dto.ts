@@ -1,4 +1,11 @@
-import { IsIn, IsInt, IsOptional, IsPositive, IsString } from 'class-validator'
+import {
+  IsIn,
+  IsInt,
+  IsOptional,
+  IsPositive,
+  IsString,
+  Min,
+} from 'class-validator'
 
 class UpdatePlanDto {
   @IsOptional()
@@ -22,12 +29,12 @@ class UpdatePlanDto {
 
   @IsOptional()
   @IsInt()
-  @IsPositive()
+  @Min(-1)
   public numAccounts: number
 
   @IsOptional()
   @IsInt()
-  @IsPositive()
+  @Min(-1)
   public numServices: number
 
   @IsOptional()
