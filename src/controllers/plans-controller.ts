@@ -40,6 +40,8 @@ export const createPlan = async (req: Request, res: Response) => {
         users: 0,
         description,
         state: dto.state,
+        numAccounts: dto.numAccounts,
+        numServices: dto.numServices,
       },
     })
     res.status(201).json({ message: 'Plan creado' })
