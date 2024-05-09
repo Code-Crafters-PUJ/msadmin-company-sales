@@ -4,6 +4,7 @@ import {
   deleteTrial,
   getAllTrials,
   getTrialByType,
+  updateTrial,
 } from '../controllers'
 import {
   validateDto,
@@ -23,7 +24,7 @@ router.get('/:id', [validateSalesOrAdminRole], getTrialByType)
 router.put(
   '/:id',
   [validateSalesRole, validateDto(UpdateTrialDto)],
-  createTrial,
+  updateTrial,
 )
 
 router.delete('/:id', [validateSalesRole], deleteTrial)
