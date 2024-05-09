@@ -3,10 +3,6 @@ import { IsIn, IsInt, IsOptional, IsPositive, IsString } from 'class-validator'
 class UpdateTrialDto {
   @IsString()
   @IsOptional()
-  public companyName: string
-
-  @IsString()
-  @IsOptional()
   public plan: string
 
   @IsInt()

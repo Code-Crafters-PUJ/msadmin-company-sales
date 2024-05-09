@@ -59,7 +59,6 @@ export const updateTrial = async (req: Request, res: Response) => {
       where: { id: parseInt(id) },
       data: {
         plan: { connect: { type: dto.plan } },
-        client: { connect: { companyName: dto.companyName } },
         duration: dto.duration,
         state: dto.state,
       },
