@@ -1,5 +1,10 @@
 import express from 'express'
-import { createTrial, getAllTrials, getTrialByType } from '../controllers'
+import {
+  createTrial,
+  deleteTrial,
+  getAllTrials,
+  getTrialByType,
+} from '../controllers'
 import {
   validateDto,
   validateSalesOrAdminRole,
@@ -21,6 +26,6 @@ router.put(
   createTrial,
 )
 
-router.delete('/:id', [validateSalesRole], createTrial)
+router.delete('/:id', [validateSalesRole], deleteTrial)
 
 export default router
