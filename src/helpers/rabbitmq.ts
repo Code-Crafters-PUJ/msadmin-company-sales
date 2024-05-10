@@ -6,14 +6,45 @@ export const connect = async (): Promise<amqp.Channel> => {
   return channel
 }
 
-export const validateJWT = async (jwt: string): Promise<string> => {
+export const setupClientsListener = async (): Promise<string> => {
   const channel = await connect()
 
-  // Send request to the queue
-  const queue = 'jwt_validation_queue'
-  await channel.assertQueue(queue, { durable: false })
-  channel.sendToQueue(queue, Buffer.from(jwt))
+  // Declare the queue
+  const queueName = 'your_queue_name'
+  await channel.assertQueue(queueName, { durable: false }) // Adjust options as per your requirement
 
-  // FIXME:
-  throw new Error('Not implemented')
+  // Bind the queue to an exchange
+  const exchangeName = 'your_exchange_name'
+  const routingKey = 'your_routing_key' // Routing key to bind the queue to the exchange
+  await channel.bindQueue(queueName, exchangeName, routingKey)
+
+  // Consume messages from the queue
+  await channel.consume(queueName, async (msg) => {
+    if (msg !== null) {
+      try {
+        // Process the message and insert values into your database
+        const messageContent = msg.content.toString()
+        // Example: Parse JSON message
+        const data = JSON.parse(messageContent)
+        // Example: Insert data into database
+        await insertIntoDatabase(data)
+
+        // Acknowledge the message
+        channel.ack(msg)
+      } catch (error) {
+        console.error('Error processing message:', error)
+        // Reject (requeue) the message in case of failure
+        channel.reject(msg, true)
+      }
+    }
+  })
+
+  return `Listening for messages on queue: ${queueName}`
+}
+
+const insertIntoDatabase = async (data) => {
+  // Your database insertion logic here
+  console.log('Inserting data into database:', data)
+  // Example: Insert data into MongoDB
+  // await YourModel.create(data);
 }
