@@ -6,6 +6,8 @@ COPY ./package-lock.json .
 RUN npm ci
 COPY . .
 
+RUN npx prisma generate
+
 RUN npm run build
 
 
@@ -15,8 +17,11 @@ WORKDIR /usr/local/app
 COPY ./package.json .
 COPY ./package-lock.json .
 COPY ./.env .
+COPY ./prisma/ ./prisma/
 
 RUN npm ci --omit=dev
+
+RUN npx prisma generate
 
 COPY --from=build /usr/local/app/build .
 
