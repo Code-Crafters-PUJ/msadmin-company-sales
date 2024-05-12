@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 
-import { hasAdminRole, hasSalesRole } from '../helpers/jwt'
+import { isValidToken } from '../helpers/jwt'
 
 export const validateSalesRole = async (
   req: Request,
@@ -9,10 +9,15 @@ export const validateSalesRole = async (
 ) => {
   const { authorization } = req.headers
 
-  // if (!authorization) {
-  //   res.status(401).json({ error: 'No autorizado' })
-  //   return
-  // }
+  if (!authorization) {
+    res.status(401).json({ error: 'No autorizado' })
+    return
+  }
+
+  if (!isValidToken(authorization as string)) {
+    res.status(403).json({ error: 'Token inválido' })
+    return
+  }
 
   // if (!hasSalesRole(authorization as string)) {
   //   res
@@ -31,10 +36,15 @@ export const validateSalesOrAdminRole = async (
 ) => {
   const { authorization } = req.headers
 
-  // if (!authorization) {
-  //   res.status(401).json({ error: 'No autorizado' })
-  //   return
-  // }
+  if (!authorization) {
+    res.status(401).json({ error: 'No autorizado' })
+    return
+  }
+
+  if (!isValidToken(authorization as string)) {
+    res.status(403).json({ error: 'Token inválido' })
+    return
+  }
 
   // if (
   //   !(
