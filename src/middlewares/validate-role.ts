@@ -9,16 +9,20 @@ export const validateSalesRole = async (
 ) => {
   const { authorization } = req.headers
 
+  /*
   if (!authorization) {
     res.status(401).json({ error: 'No autorizado' })
     return
   }
+  */
 
+  /*
   if (!isValidToken(authorization as string)) {
     res.status(403).json({ error: 'Token inválido' })
     return
   }
 
+  */
   // if (!hasSalesRole(authorization as string)) {
   //   res
   //     .status(403)
@@ -35,16 +39,19 @@ export const validateSalesOrAdminRole = async (
   next: NextFunction,
 ) => {
   const { authorization } = req.headers
-
+  /*
   if (!authorization) {
     res.status(401).json({ error: 'No autorizado' })
     return
   }
+  */
 
+  /*
   if (!isValidToken(authorization as string)) {
     res.status(403).json({ error: 'Token inválido' })
     return
   }
+  */
 
   // if (
   //   !(

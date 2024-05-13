@@ -3,95 +3,74 @@ import { plainToClass } from 'class-transformer'
 
 import { CreateServiceDto, UpdateServiceDto } from '../dtos'
 import { prismaClient } from '../db/prisma'
+import { publicarMensajeEnCola } from 'src/rabbitmq';
 
-export const createService = async (
-  req: Request,
-  res: Response,
-): Promise<void> => {
-  const dto = plainToClass(CreateServiceDto, req.body)
+export const createService = async (req: Request, res: Response): Promise<void> => {
+  const dto = plainToClass(CreateServiceDto, req.body);
 
   try {
     const service = await prismaClient.service.findUnique({
       where: { name: dto.name, active: false },
-    })
+    });
 
     if (service) {
       await prismaClient.service.update({
         where: { name: dto.name },
-        data: {
-          active: true,
-        },
-      })
+        data: { active: true },
+      });
 
-      res
-        .status(201)
-        .json({ message: 'Servicio creado correctamente', service })
-      return
+      res.status(201).json({ message: 'Servicio creado correctamente', service });
+      await publicarMensajeEnCola('createService', JSON.stringify(dto));
+      return;
     }
 
     const newService = await prismaClient.service.create({
-      data: {
-        name: dto.name,
-        state: dto.state,
-        users: 0,
-      },
-    })
+      data: { name: dto.name, state: dto.state, users: 0 },
+    });
 
-    res
-      .status(201)
-      .json({ message: 'Servicio creado correctamente', service: newService })
+    res.status(201).json({ message: 'Servicio creado correctamente', service: newService });
+    await publicarMensajeEnCola('createService', JSON.stringify(dto));
   } catch (error) {
-    console.error('Error al crear servicio:', error)
-    res.status(500).json({ error: 'Error interno del servidor' })
+    console.error('Error al crear servicio:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
-}
+};
 
-export const updateService = async (
-  req: Request,
-  res: Response,
-): Promise<void> => {
-  const { name } = req.params
-
-  const dto = plainToClass(UpdateServiceDto, req.body)
+export const updateService = async (req: Request, res: Response): Promise<void> => {
+  const { name } = req.params;
+  const dto = plainToClass(UpdateServiceDto, req.body);
 
   try {
     const updatedService = await prismaClient.service.update({
       where: { name, active: true },
-      data: {
-        state: dto.state,
-      },
-    })
+      data: { state: dto.state },
+    });
 
-    res.json({
-      message: 'Servicio actualizado correctamente',
-      service: updatedService,
-    })
+    res.json({ message: 'Servicio actualizado correctamente', service: updatedService });
+    await publicarMensajeEnCola('updateService',JSON.stringify({name,dto}));
   } catch (error) {
-    console.error('Error al actualizar servicio:', error)
-    res.status(500).json({ error: 'Error interno del servidor' })
+    console.error('Error al actualizar servicio:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
-}
+};
 
-export const deleteService = async (
-  req: Request,
-  res: Response,
-): Promise<void> => {
-  const { name } = req.params
+
+export const deleteService = async (req: Request, res: Response): Promise<void> => {
+  const { name } = req.params;
 
   try {
     await prismaClient.service.update({
-      where: { name: name },
-      data: {
-        active: false,
-      },
-    })
+      where: { name },
+      data: { active: false },
+    });
 
-    res.json({ message: 'Servicio eliminado correctamente' })
+    res.json({ message: 'Servicio eliminado correctamente' });
+    await publicarMensajeEnCola('deleteService', JSON.stringify(name));
   } catch (error) {
-    console.error('Error al eliminar servicio:', error)
-    res.status(500).json({ error: 'Error interno del servidor' })
+    console.error('Error al eliminar servicio:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
-}
+};
 
 export const getServiceById = async (
   req: Request,
