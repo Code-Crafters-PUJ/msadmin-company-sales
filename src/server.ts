@@ -11,7 +11,7 @@ import {
 } from './routers'
 import { prismaClient } from './db/prisma'
 import cors from 'cors'
-import {connect, setupClientsListener } from './helpers/rabbitmq'
+import { connect, setupClientsListener } from './helpers/rabbitmq'
 
 class Server {
   private app: Application
@@ -27,9 +27,8 @@ class Server {
   }
 
   private async connectDatabase(): Promise<void> {
-    await prismaClient.$connect() 
+    await prismaClient.$connect()
   }
-
 
   private middlewares(): void {
     this.app.use(cors())
@@ -47,7 +46,7 @@ class Server {
 
   private async setupRabbitMQ(): Promise<void> {
     try {
-      const message = await setupClientsListener() 
+      const message = await setupClientsListener()
       console.log(message)
     } catch (error) {
       console.error('Error setting up RabbitMQ:', error)
