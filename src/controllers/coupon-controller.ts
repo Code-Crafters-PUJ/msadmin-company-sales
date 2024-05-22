@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { plainToClass } from 'class-transformer'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 import { v4 as uuidV4 } from 'uuid'
+import { publicarMensajeEnCola } from '../rabbitmq';
 
 import { CreateCouponDto, UpdateCouponDto } from '../dtos'
 import { prismaClient } from '../db/prisma'
@@ -18,11 +19,13 @@ export const createCoupon = async (req: Request, res: Response) => {
         duration: dto.duration,
         expirationDate: dto.expirationDate,
       },
-    })
+    });
 
-    res
-      .status(201)
-      .json({ message: 'Cupon creado correctamente', coupon: newCoupon })
+    // Publicar mensaje en la cola de RabbitMQ
+    const mensaje = JSON.stringify({ metodo: 'create', objeto: newCoupon });
+    await publicarMensajeEnCola('Coupon_queue', mensaje);
+
+    res.status(201).json({ message: 'Cupon creado correctamente', coupon: newCoupon });
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError) {
       const cause = error.meta?.cause.toString()
@@ -50,12 +53,16 @@ export const updateCoupon = async (req: Request, res: Response) => {
         duration: dto.duration,
         expirationDate: dto.expirationDate,
       },
-    })
+    });
+
+    // Publicar mensaje en la cola de RabbitMQ
+    const mensaje = JSON.stringify({ metodo: 'update', objeto: updatedCoupon });
+    await publicarMensajeEnCola('Coupon_queue', mensaje);
 
     res.status(200).json({
       message: 'Cupon actualizado correctamente',
       coupon: updatedCoupon,
-    })
+    });
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError) {
       const cause = error.meta?.cause.toString()
@@ -77,9 +84,13 @@ export const deleteCoupon = async (req: Request, res: Response) => {
     await prismaClient.coupon.update({
       where: { code },
       data: { active: false },
-    })
+    });
 
-    res.status(200).json({ message: 'Cupon eliminado correctamente' })
+    // Publicar mensaje en la cola de RabbitMQ
+    const mensaje = JSON.stringify({ metodo: 'delete', objeto: { code } });
+    await publicarMensajeEnCola('Coupon_queue', mensaje);
+
+    res.status(200).json({ message: 'Cupon eliminado correctamente' });
   } catch (error) {
     console.error('Error al eliminar cupon:', error)
     res.status(500).json({ error: 'Error interno del servidor' })
