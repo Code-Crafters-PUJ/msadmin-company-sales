@@ -12,7 +12,7 @@ class UpdateTrialDto {
 
   @IsString()
   @IsOptional()
-  @IsIn(['En uso', 'Sin uso'])
+  @IsIn(['Borrador', 'Mantenimiento', 'Publicado', 'Deshabilitado'])
   public state: string
 }
 

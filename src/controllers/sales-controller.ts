@@ -29,11 +29,8 @@ export const createBill = async (
         client: { connect: { id: dto.clientId } },
         initialDate: dto.initialDate,
         finalDate: dto.finalDate,
-        plan: {
-          connect: {
-            type: dto.planType,
-          },
-        },
+        plan: { connect: { type: dto.planType } },
+        trial: { connect: { id: dto.trialId } },
         payment: { connect: { method: dto.paymentMethod } },
         amount: dto.amount,
         paymentDate: dto.paymentDate,

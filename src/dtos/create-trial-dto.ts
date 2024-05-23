@@ -2,9 +2,6 @@ import { IsIn, IsInt, IsPositive, IsString } from 'class-validator'
 
 class CreateTrialDto {
   @IsString()
-  public companyName: string
-
-  @IsString()
   public plan: string
 
   @IsInt()

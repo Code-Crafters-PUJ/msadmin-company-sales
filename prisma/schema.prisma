@@ -27,7 +27,6 @@ model Client {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
-  Trials    Trials[]
 
   @@index(email)
   @@index(nit)
@@ -55,12 +54,14 @@ model Billing {
   amount      Float
   active      Boolean  @default(true)
   clientId    Int
-  planId      Int
+  planId      Int?
   paymentId   Int
+  trialId     Int?
 
   client  Client  @relation(fields: [clientId], references: [id])
-  plan    Plan    @relation(fields: [planId], references: [id])
+  plan    Plan?   @relation(fields: [planId], references: [id])
   payment Payment @relation(fields: [paymentId], references: [id])
+  trial   Trials? @relation(fields: [trialId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -86,7 +87,6 @@ model Plan {
   users          Int
   state          String
   numAccounts    Int     @default(-1)
-  numServices    Int     @default(-1)
   active         Boolean @default(true)
 
   billings Billing[]
@@ -129,10 +129,9 @@ model Trials {
   state    String
   active   Boolean @default(true)
   planType String
-  clientId Int     @unique
 
-  client Client @relation(fields: [clientId], references: [id])
-  plan   Plan   @relation(fields: [planType], references: [type])
+  plan     Plan      @relation(fields: [planType], references: [type])
+  billings Billing[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt

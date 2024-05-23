@@ -45,6 +45,7 @@ class Server {
   }
 
   private async setupRabbitMQ(): Promise<void> {
+    connect()
     try {
       const message = await setupClientsListener()
       console.log(message)

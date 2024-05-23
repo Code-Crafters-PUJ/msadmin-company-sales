@@ -1,5 +1,12 @@
 import { Transform } from 'class-transformer'
-import { IsDateString, IsInt, IsPositive, IsString } from 'class-validator'
+import {
+  IsDateString,
+  IsInt,
+  IsNumber,
+  IsOptional,
+  IsPositive,
+  IsString,
+} from 'class-validator'
 import { transformToDate } from '../helpers/transform'
 
 class CreateBillDto {
@@ -15,7 +22,12 @@ class CreateBillDto {
   public finalDate: string
 
   @IsString()
+  @IsOptional()
   public planType: string
+
+  @IsNumber()
+  @IsOptional()
+  public trialId: number
 
   @IsString()
   public paymentMethod: string
