@@ -50,7 +50,10 @@ export const updateTrial = async (
       message: 'Trial actualizado correctamente',
       trial: updatedTrial,
     })
-    await publicarMensajeEnCola(QUEUES_WRITE_TRAIL.update, JSON.stringify({ id, dto }))
+    await publicarMensajeEnCola(
+      QUEUES_WRITE_TRAIL.update,
+      JSON.stringify({ id, dto }),
+    )
   } catch (error) {
     console.error('Error al actualizar plan:', error)
     res.status(500).json({ error: 'Error interno del servidor' })

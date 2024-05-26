@@ -119,7 +119,10 @@ export const updatePlan = async (
     })
 
     res.json({ message: 'Plan modificado', plan })
-    await publicarMensajeEnCola(QUEUES_WRITE_PLAN.update, JSON.stringify({ type, dto }))
+    await publicarMensajeEnCola(
+      QUEUES_WRITE_PLAN.update,
+      JSON.stringify({ type, dto }),
+    )
   } catch (error) {
     console.error('Error al actualizar plan:', error)
     res.status(500).json({ error: 'Error interno del servidor' })
@@ -137,7 +140,10 @@ export const deletePlan = async (
       where: { type, active: true },
       data: { active: false },
     })
-    await publicarMensajeEnCola(QUEUES_WRITE_PLAN.delete, JSON.stringify({ type }))
+    await publicarMensajeEnCola(
+      QUEUES_WRITE_PLAN.delete,
+      JSON.stringify({ type }),
+    )
   } catch (error) {
     console.error('Error al eliminar plan:', error)
     res.status(500).json({ error: 'Error interno del servidor' })
