@@ -1,5 +1,5 @@
 import amqp from 'amqplib'
-import { QUEUE_READ_CLIENTS, RABBIT_HOST } from 'src/config/environment'
+import { QUEUE_READ_CLIENTS, RABBIT_HOST } from '../config/environment'
 
 export const connect = async (): Promise<amqp.Channel> => {
   const connection = await amqp.connect(`amqp://${RABBIT_HOST}`)
