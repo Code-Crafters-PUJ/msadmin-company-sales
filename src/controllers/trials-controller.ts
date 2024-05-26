@@ -4,7 +4,7 @@ import { plainToClass } from 'class-transformer'
 import { CreateTrialDto, UpdateTrialDto } from '../dtos'
 import { prismaClient } from '../db/prisma'
 import { publicarMensajeEnCola } from '../helpers/rabbitmq'
-import { QUEUES_WRITE_TRAIL } from 'src/config/environment'
+import { QUEUES_WRITE_TRAIL } from '../config/environment'
 
 export const createTrial = async (
   req: Request,

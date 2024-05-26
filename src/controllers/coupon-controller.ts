@@ -6,7 +6,7 @@ import { publicarMensajeEnCola } from '../helpers/rabbitmq'
 
 import { CreateCouponDto, UpdateCouponDto } from '../dtos'
 import { prismaClient } from '../db/prisma'
-import { QUEUES_WRITE_COUPON } from 'src/config/environment'
+import { QUEUES_WRITE_COUPON } from '../config/environment'
 
 export const createCoupon = async (req: Request, res: Response) => {
   const dto = plainToClass(CreateCouponDto, req.body)

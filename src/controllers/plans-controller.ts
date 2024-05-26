@@ -4,7 +4,7 @@ import { plainToClass } from 'class-transformer'
 import { CreatePlanDto, UpdatePlanDto } from '../dtos'
 import { prismaClient } from '../db/prisma'
 import { publicarMensajeEnCola } from '../helpers/rabbitmq'
-import { QUEUES_WRITE_PLAN } from 'src/config/environment'
+import { QUEUES_WRITE_PLAN } from '../config/environment'
 
 export const createPlan = async (
   req: Request,

@@ -4,7 +4,7 @@ import { plainToClass } from 'class-transformer'
 import { CreateServiceDto, UpdateServiceDto } from '../dtos'
 import { prismaClient } from '../db/prisma'
 import { publicarMensajeEnCola } from '../helpers/rabbitmq'
-import { QUEUES_WRITE_SERVICE } from 'src/config/environment'
+import { QUEUES_WRITE_SERVICE } from '../config/environment'
 
 export const createService = async (
   req: Request,
