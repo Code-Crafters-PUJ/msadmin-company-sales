@@ -6,6 +6,7 @@ import { publicarMensajeEnCola } from '../helpers/rabbitmq'
 
 import { CreateCouponDto, UpdateCouponDto } from '../dtos'
 import { prismaClient } from '../db/prisma'
+import { QUEUES_WRITE_COUPON } from 'src/config/environment'
 
 export const createCoupon = async (req: Request, res: Response) => {
   const dto = plainToClass(CreateCouponDto, req.body)
@@ -23,7 +24,7 @@ export const createCoupon = async (req: Request, res: Response) => {
 
     // Publicar mensaje en la cola de RabbitMQ
     const mensaje = JSON.stringify({ metodo: 'create', objeto: newCoupon })
-    await publicarMensajeEnCola('Coupon_queue', mensaje)
+    await publicarMensajeEnCola(QUEUES_WRITE_COUPON.create, mensaje)
 
     res
       .status(201)
@@ -59,7 +60,7 @@ export const updateCoupon = async (req: Request, res: Response) => {
 
     // Publicar mensaje en la cola de RabbitMQ
     const mensaje = JSON.stringify({ metodo: 'update', objeto: updatedCoupon })
-    await publicarMensajeEnCola('Coupon_queue', mensaje)
+    await publicarMensajeEnCola(QUEUES_WRITE_COUPON.update, mensaje)
 
     res.status(200).json({
       message: 'Cupon actualizado correctamente',
@@ -90,7 +91,7 @@ export const deleteCoupon = async (req: Request, res: Response) => {
 
     // Publicar mensaje en la cola de RabbitMQ
     const mensaje = JSON.stringify({ metodo: 'delete', objeto: { code } })
-    await publicarMensajeEnCola('Coupon_queue', mensaje)
+    await publicarMensajeEnCola(QUEUES_WRITE_COUPON.delete, mensaje)
 
     res.status(200).json({ message: 'Cupon eliminado correctamente' })
   } catch (error) {

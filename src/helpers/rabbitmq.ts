@@ -1,7 +1,8 @@
 import amqp from 'amqplib'
+import { QUEUE_READ_CLIENTS, RABBIT_HOST } from 'src/config/environment'
 
 export const connect = async (): Promise<amqp.Channel> => {
-  const connection = await amqp.connect('amqp://localhost')
+  const connection = await amqp.connect(`amqp://${RABBIT_HOST}`)
   const channel = await connection.createChannel()
   return channel
 }
@@ -10,11 +11,10 @@ export const setupClientsListener = async (): Promise<string> => {
   const channel = await connect()
 
   // Declare the queue
-  const queueName = 'company_queue'
-  await channel.assertQueue(queueName, { durable: false })
+  await channel.assertQueue(QUEUE_READ_CLIENTS, { durable: false })
 
   // Consume messages from the queue
-  await channel.consume(queueName, async (msg) => {
+  await channel.consume(QUEUE_READ_CLIENTS, async (msg) => {
     if (msg !== null) {
       try {
         // Process the message and insert values into your database
@@ -32,7 +32,7 @@ export const setupClientsListener = async (): Promise<string> => {
     }
   })
 
-  return `Listening for messages on queue: ${queueName}`
+  return `Listening for messages on queue: ${QUEUE_READ_CLIENTS}`
 }
 
 const parsePythonMessage = (message: string): any => {
@@ -59,7 +59,7 @@ export async function publicarMensajeEnCola(
 ): Promise<void> {
   try {
     // Conectarse al servidor RabbitMQ
-    const connection = await amqp.connect('amqp://localhost')
+    const connection = await amqp.connect(`amqp://${RABBIT_HOST}`)
 
     // Crear un canal
     const channel = await connection.createChannel()

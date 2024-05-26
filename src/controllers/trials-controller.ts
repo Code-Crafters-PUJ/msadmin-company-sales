@@ -4,6 +4,7 @@ import { plainToClass } from 'class-transformer'
 import { CreateTrialDto, UpdateTrialDto } from '../dtos'
 import { prismaClient } from '../db/prisma'
 import { publicarMensajeEnCola } from '../helpers/rabbitmq'
+import { QUEUES_WRITE_TRAIL } from 'src/config/environment'
 
 export const createTrial = async (
   req: Request,
@@ -21,7 +22,7 @@ export const createTrial = async (
     })
 
     res.status(201).json({ message: 'Trial creado correctamente', trial })
-    await publicarMensajeEnCola('createTrial', JSON.stringify(dto))
+    await publicarMensajeEnCola(QUEUES_WRITE_TRAIL.create, JSON.stringify(dto))
   } catch (error) {
     console.error('Error al registrar plan:', error)
     res.status(500).json({ error: 'Error interno del servidor' })
@@ -49,7 +50,7 @@ export const updateTrial = async (
       message: 'Trial actualizado correctamente',
       trial: updatedTrial,
     })
-    await publicarMensajeEnCola('updateTrial', JSON.stringify({ id, dto }))
+    await publicarMensajeEnCola(QUEUES_WRITE_TRAIL.update, JSON.stringify({ id, dto }))
   } catch (error) {
     console.error('Error al actualizar plan:', error)
     res.status(500).json({ error: 'Error interno del servidor' })
@@ -69,7 +70,7 @@ export const deleteTrial = async (
     })
 
     res.json({ message: 'Trial eliminado correctamente' })
-    await publicarMensajeEnCola('deleteTrial', JSON.stringify(id))
+    await publicarMensajeEnCola(QUEUES_WRITE_TRAIL.delete, JSON.stringify(id))
   } catch (error) {
     console.error('Error al eliminar plan:', error)
     res.status(500).json({ error: 'Error interno del servidor' })

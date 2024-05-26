@@ -4,6 +4,7 @@ import { plainToClass } from 'class-transformer'
 import { CreateServiceDto, UpdateServiceDto } from '../dtos'
 import { prismaClient } from '../db/prisma'
 import { publicarMensajeEnCola } from '../helpers/rabbitmq'
+import { QUEUES_WRITE_SERVICE } from 'src/config/environment'
 
 export const createService = async (
   req: Request,
@@ -36,7 +37,7 @@ export const createService = async (
     res
       .status(201)
       .json({ message: 'Servicio creado correctamente', service: newService })
-    await publicarMensajeEnCola('createService', JSON.stringify(dto))
+    await publicarMensajeEnCola(QUEUES_WRITE_SERVICE.create, JSON.stringify(dto))
   } catch (error) {
     console.error('Error al crear servicio:', error)
     res.status(500).json({ error: 'Error interno del servidor' })
@@ -60,7 +61,7 @@ export const updateService = async (
       message: 'Servicio actualizado correctamente',
       service: updatedService,
     })
-    await publicarMensajeEnCola('updateService', JSON.stringify({ name, dto }))
+    await publicarMensajeEnCola(QUEUES_WRITE_SERVICE.update, JSON.stringify({ name, dto }))
   } catch (error) {
     console.error('Error al actualizar servicio:', error)
     res.status(500).json({ error: 'Error interno del servidor' })
@@ -80,7 +81,7 @@ export const deleteService = async (
     })
 
     res.json({ message: 'Servicio eliminado correctamente' })
-    await publicarMensajeEnCola('deleteService', JSON.stringify(name))
+    await publicarMensajeEnCola(QUEUES_WRITE_SERVICE.delete, JSON.stringify(name))
   } catch (error) {
     console.error('Error al eliminar servicio:', error)
     res.status(500).json({ error: 'Error interno del servidor' })
