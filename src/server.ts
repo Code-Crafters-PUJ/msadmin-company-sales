@@ -23,7 +23,7 @@ class Server {
     this.middlewares()
     this.routes()
 
-    //this.setupRabbitMQ()
+    this.setupRabbitMQ()
   }
 
   private async connectDatabase(): Promise<void> {

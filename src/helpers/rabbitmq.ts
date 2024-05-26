@@ -68,7 +68,7 @@ export async function publicarMensajeEnCola(
     await channel.assertQueue(nombreCola)
 
     // Publicar el mensaje en la cola
-    channel.sendToQueue(nombreCola, Buffer.from(mensaje))
+    console.log(channel.sendToQueue(nombreCola, Buffer.from(mensaje)));
 
     console.log(`Mensaje publicado en la cola ${nombreCola}: ${mensaje}`)
 
