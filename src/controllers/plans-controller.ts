@@ -35,6 +35,11 @@ export const createPlan = async (
       return
     }
 
+    const idServices = await prismaClient.service.findMany({
+      where: { name: { in: dto.services }, active: true },
+      select: { id: true },
+    })
+
     await prismaClient.plan.create({
       data: {
         type: dto.type,
@@ -45,9 +50,16 @@ export const createPlan = async (
         description,
         state: dto.state,
         numAccounts: dto.numAccounts,
-        numServices: dto.numServices,
+        services: {
+          createMany: {
+            data: idServices.map((service) => {
+              return { serviceId: service.id }
+            }),
+          },
+        },
       },
     })
+
     res.status(201).json({ message: 'Plan creado' })
     await publicarMensajeEnCola('createPlan', JSON.stringify(dto))
   } catch (error) {
@@ -64,6 +76,13 @@ export const updatePlan = async (
   const { type } = req.params
 
   try {
+    await prismaClient.planHasService.deleteMany({
+      where: {
+        plan: { type },
+        service: { name: { notIn: dto.services } },
+      },
+    })
+
     const plan = await prismaClient.plan.update({
       where: { type },
       data: {
@@ -71,10 +90,33 @@ export const updatePlan = async (
         semestralPrice: dto.semestralPrice,
         anualPrice: dto.anualPrice,
         numAccounts: dto.numAccounts,
-        numServices: dto.numServices,
         state: dto.state,
       },
+      include: { services: true },
     })
+
+    const idServices = await prismaClient.service.findMany({
+      where: {
+        name: { in: dto.services },
+        active: true,
+        id: {
+          notIn: plan.services.map((service) => {
+            return service.serviceId
+          }),
+        },
+      },
+      select: { id: true },
+    })
+
+    await prismaClient.planHasService.createMany({
+      data: idServices.map((service) => {
+        return {
+          planId: plan.id,
+          serviceId: service.id,
+        }
+      }),
+    })
+
     res.json({ message: 'Plan modificado', plan })
     await publicarMensajeEnCola('updatePlan', JSON.stringify({ type, dto }))
   } catch (error) {
@@ -109,6 +151,34 @@ export const getAllplans = async (req: Request, res: Response) => {
       where: {
         active: true,
       },
+      include: {
+        services: {
+          select: { service: { select: { name: true } } },
+        },
+      },
     }),
   })
+}
+
+export const getPlanByType = async (req: Request, res: Response) => {
+  const { type } = req.params
+
+  const plan = await prismaClient.plan.findFirst({
+    where: {
+      type,
+      active: true,
+    },
+    include: {
+      services: {
+        select: { service: { select: { name: true } } },
+      },
+    },
+  })
+
+  if (!plan) {
+    res.status(404).json({ error: 'Plan no encontrado' })
+    return
+  }
+
+  res.json({ plan })
 }

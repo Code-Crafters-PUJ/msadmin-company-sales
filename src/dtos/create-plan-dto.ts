@@ -1,4 +1,5 @@
 import {
+  IsArray,
   IsIn,
   IsInt,
   IsPositive,
@@ -34,9 +35,9 @@ class CreatePlanDto {
   @Min(-1)
   public numAccounts: number
 
-  @IsInt()
-  @Min(-1)
-  public numServices: number
+  @IsArray()
+  @IsString({ each: true })
+  public services: string[]
 }
 
 export default CreatePlanDto

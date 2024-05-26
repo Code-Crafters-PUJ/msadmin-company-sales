@@ -1,4 +1,5 @@
 import {
+  IsArray,
   IsIn,
   IsInt,
   IsOptional,
@@ -32,10 +33,9 @@ class UpdatePlanDto {
   @Min(-1)
   public numAccounts: number
 
-  @IsOptional()
-  @IsInt()
-  @Min(-1)
-  public numServices: number
+  @IsArray()
+  @IsString({ each: true })
+  public services: string[]
 
   @IsOptional()
   @IsString()

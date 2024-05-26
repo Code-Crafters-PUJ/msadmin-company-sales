@@ -23,7 +23,7 @@ class Server {
     this.middlewares()
     this.routes()
 
-    this.setupRabbitMQ()
+    //this.setupRabbitMQ()
   }
 
   private async connectDatabase(): Promise<void> {
@@ -45,8 +45,8 @@ class Server {
   }
 
   private async setupRabbitMQ(): Promise<void> {
-    connect()
     try {
+      connect()
       const message = await setupClientsListener()
       console.log(message)
     } catch (error) {
