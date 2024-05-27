@@ -9,7 +9,7 @@ class CreateTrialDto {
   public duration: number
 
   @IsString()
-  @IsIn(['En uso', 'Sin uso'])
+  @IsIn(['Borrador', 'Mantenimiento', 'Publicado', 'Deshabilitado'])
   public state: string
 }
 

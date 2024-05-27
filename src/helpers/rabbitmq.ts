@@ -1,5 +1,6 @@
 import amqp from 'amqplib'
 import { QUEUE_READ_CLIENTS, RABBIT_HOST } from '../config/environment'
+import { prismaClient } from '../db/prisma'
 
 export const connect = async (): Promise<amqp.Channel> => {
   const connection = await amqp.connect(`amqp://${RABBIT_HOST}`)
@@ -50,7 +51,28 @@ const insertIntoDatabase = async (data: any) => {
   // Your database insertion logic here
   console.log('Inserting data into database:', data)
   // Example: Insert data into MongoDB
-  // await YourModel.create(data);
+  /*{
+    '"businessName': '1a',
+    employeeNumber: '22',
+    NIT: '896-806-3285',
+    businessArea: 'thisnuts',
+    IDCompany: '5"'
+  }*/
+  
+  try {
+
+    await prismaClient.client.create({
+      data: {
+        companyName: data['businessName'],
+        contactName: data['businessName'],
+        email: `info@${data['businessName']}.com`,
+        nit: parseInt(data['NIT']),
+        telephone: data['employeeNumber']
+      }
+    })
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 export async function publicarMensajeEnCola(
